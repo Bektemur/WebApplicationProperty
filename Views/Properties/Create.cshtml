@@ -1,0 +1,208 @@
+﻿@model WebApplicationProperty.Models.Properties
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Properties</h4>
+<hr />
+<div class="container">
+    <form asp-action="Create">
+
+        <div class="row">
+            <div class="col-sm">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="TypePropertyId" class="control-label"></label>
+                    <select asp-for="TypePropertyId" class="form-control" asp-items="ViewBag.TypePropertyId"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProjectId" class="control-label"></label>
+                    <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StationId" class="control-label"></label>
+                    <select asp-for="StationId" class="form-control" asp-items="ViewBag.StationId"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Price_sqm" class="control-label"></label>
+                    <input asp-for="Price_sqm" class="form-control" />
+                    <span asp-validation-for="Price_sqm" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Living_area" class="control-label"></label>
+                    <input asp-for="Living_area" class="form-control" />
+                    <span asp-validation-for="Living_area" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Land_area" class="control-label"></label>
+                    <input asp-for="Land_area" class="form-control" />
+                    <span asp-validation-for="Land_area" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Bathrooms" class="control-label"></label>
+                    <input asp-for="Bathrooms" class="form-control" />
+                    <span asp-validation-for="Bathrooms" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Bedrooms" class="control-label"></label>
+                    <input asp-for="Bedrooms" class="form-control" />
+                    <span asp-validation-for="Bedrooms" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Parking" class="control-label"></label>
+                    <input asp-for="Parking" class="form-control" />
+                    <span asp-validation-for="Parking" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-sm">
+                <div class="accordion" id="accordionExample">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Facilitiy
+                                </button>
+                            </h2>
+                        </div>
+                    </div>
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        <div class="card-body">
+                            <partial name="_FacilityPartial" />
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                   Common area
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                            <div class="card-body">
+                               <partial name="_CommonAreaPartial" />
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Interior
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                            <div class="card-body">
+                               <partial name="_InteriorPartial" />
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="card">
+                        <div class="card-header" id="headingFour">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    Fixtures
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+                            <div class="card-body">
+                               <partial name="_FixturesPartial" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingFive">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    Basic
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
+                            <div class="card-body">
+                               <partial name="_BasicPartial" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="headingSix">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                    Extra
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionExample">
+                            <div class="card-body">
+                               <partial name="_ExtraPartial" />
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="card">
+                        <div class="card-header" id="headingSeven">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                                    Other
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordionExample">
+                            <div class="card-body">
+                               <partial name="_OtherPartial" />
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="card">
+                        <div class="card-header" id="headingEight">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                                    Images
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#accordionExample">
+                            <div class="card-body">
+                               <partial name="_OtherPartial" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </div>
+            
+
+        </div>
+    </form>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
