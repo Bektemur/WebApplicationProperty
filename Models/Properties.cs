@@ -41,5 +41,15 @@ namespace WebApplicationProperty.Models
         public virtual List<OtherProperties> OtherProperties { get; set; }
         public virtual List<BasicProperties> BasicProperties { get; set; }
         public virtual List<CommonAreaProperties> CommonAreaProperties { get; set; }
+        public Properties()
+        {
+            ExtraProperies = new List<ExtraProperies>();
+            FacilitiesProperties = new List<FacilitiesProperty>();
+            FixturesProperties = new List<FixturesProperty>();
+            InteriorProperties = new List<InteriorProperties>();
+            OtherProperties = new List<OtherProperties>();
+            BasicProperties = new List<BasicProperties>();
+            CommonAreaProperties = new List<CommonAreaProperties>();
+        }
     }
 }

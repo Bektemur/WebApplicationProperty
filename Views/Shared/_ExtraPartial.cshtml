@@ -1,0 +1,23 @@
+﻿<table>
+    <tr>
+        @{
+            int cntextra = 0;
+            List<WebApplicationProperty.ViewModel.ExtraPropertiesViewModel> assignedExtras = ViewBag.Extra;
+
+            foreach (var extra in assignedExtras)
+            {
+                if (cntextra++ % 2 == 0)
+                {
+                @:</tr><tr>
+                }
+                @:<td style="padding-right:10px">
+                    <input type="checkbox"
+                           name="selectedExtra"
+                           value="@extra.ExtraId"
+                           @(Html.Raw(extra.Assigned ? "checked=\"checked\"" : "")) />
+                    @extra.Name
+                @:</td>
+            }
+        @:</tr>
+        }
+    </table>

@@ -1,0 +1,23 @@
+﻿<table>
+    <tr>
+        @{
+            int cntbasic = 0;
+            List<WebApplicationProperty.ViewModel.BasicPropertiesViewModel> assignedBasic = ViewBag.Basic;
+
+            foreach (var basic in assignedBasic)
+            {
+                if (cntbasic++ % 2 == 0)
+                {
+                @:</tr><tr>
+                }
+                @:<td style="padding-right:10px">
+                    <input type="checkbox"
+                           name="selectedBasic"
+                           value="@basic.BasicId"
+                           @(Html.Raw(basic.Assigned ? "checked=\"checked\"" : "")) />
+                    @basic.Name
+                @:</td>
+            }
+        @:</tr>
+        }
+    </table>
