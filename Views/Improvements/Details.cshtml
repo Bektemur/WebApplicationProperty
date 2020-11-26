@@ -1,4 +1,4 @@
-﻿@model WebApplicationProperty.Models.Other
+﻿@model WebApplicationProperty.Models.Improvement
 
 @{
     ViewData["Title"] = "Details";
@@ -7,9 +7,15 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Other</h4>
+    <h4>Improvement</h4>
     <hr />
     <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Type)
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
@@ -19,6 +25,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.OtherId">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

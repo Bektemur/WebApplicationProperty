@@ -3,14 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebApplicationProperty.Models
 {
-    public class Properties
+    public class Property
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PropertyId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -23,25 +22,23 @@ namespace WebApplicationProperty.Models
         public int Parking { get; set; }
         public DateTime Public_date { get; set; }
         public DateTime Update_date { get; set; }
-        [ForeignKey("TypePropertyId")]
+
         public int TypePropertyId { get; set; }
+        [ForeignKey("TypePropertyId")]
         public TypeProperty TypeProperties { get; set; }
+
         public int ProjectId { get; set; }
         [ForeignKey("ProjectId")]
         public Project Project { get; set; }
-        [ForeignKey("StationId")]
+
         public int StationId { get; set; }
+        [ForeignKey("StationId")]
         public Station Station { get; set; }
-        [ForeignKey("ApplicationUserId")]
+
         public string ApplicationUserId { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
-        public virtual List<ExtraProperies> ExtraProperies { get; set; }
-        public virtual List<FacilitiesProperty> FacilitiesProperties { get; set; }
-        public virtual List<FixturesProperty> FixturesProperties { get; set; }
-        public virtual List<InteriorProperties> InteriorProperties { get; set; }
-        public virtual List<OtherProperties> OtherProperties { get; set; }
-        public virtual List<BasicProperties> BasicProperties { get; set; }
-        public virtual List<CommonAreaProperties> CommonAreaProperties { get; set; }
+        [ForeignKey("ApplicationUserId")]
+        public ApplicationUser User { get; set; }    
         
+        public virtual ICollection<ImprovementToProperty> Improvements { get; set; }
     }
 }
