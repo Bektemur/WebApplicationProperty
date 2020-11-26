@@ -88,8 +88,8 @@ namespace WebApplicationProperty.Controllers
             ClaimsPrincipal currentUser = this.User;
             var currentUserID = currentUser.FindFirst(ClaimTypes.NameIdentifier).Value;
             properties.ApplicationUserId = currentUserID;
-            properties.Public_date = DateTime.Now;
-            properties.Update_date = DateTime.Now;
+            properties.Public_date = DateTime.UtcNow;
+            properties.Update_date = DateTime.UtcNow;
             if (selectedFacilities != null)
             {
                 properties.FacilitiesProperties = new List<FacilitiesProperty>();

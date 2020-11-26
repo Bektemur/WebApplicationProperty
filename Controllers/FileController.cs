@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,10 +19,14 @@ namespace WebApplicationProperty.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public FileController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        private readonly ILogger<FileController> _logger;
+        public FileController(ApplicationDbContext context,
+            IWebHostEnvironment webHostEnvironment,
+            ILoggerFactory loggerFactory)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _logger = loggerFactory.CreateLogger<FileController>();
         }
 
         public async Task<IActionResult> Index()
@@ -46,26 +51,33 @@ namespace WebApplicationProperty.Controllers
             var propertyName = _context.Properties.Where(v => v.PropertyId == propertyid).Select(v => v.Name).FirstOrDefault();
             foreach (var file in files)
             {
-                var basePath = Path.Combine(_webHostEnvironment.WebRootPath + "\\images\\");
-                bool basePathExists = System.IO.Directory.Exists(basePath);
-                if (!basePathExists) Directory.CreateDirectory(basePath);
-                var fileName = Path.GetFileNameWithoutExtension(file.FileName);
-                var filePath = Path.Combine(basePath, fileName);
+                var dateTime = DateTime.UtcNow;
+                var internalFolder = Path.Combine("images", "Property", dateTime.Year.ToString(), dateTime.Month.ToString(), dateTime.Day.ToString());
+                var basePath = Path.Combine(_webHostEnvironment.WebRootPath, internalFolder);
+                if (!Directory.Exists(basePath)) { Directory.CreateDirectory(basePath); }
+                var fileName = Guid.NewGuid().ToString();
                 var extension = Path.GetExtension(file.FileName);
-                
-                    var fileModel = new FileOnFileSystemModel
-                    {
-                        CreatedOn = DateTime.Now,
-                        FileType = file.ContentType,
-                        Extension = extension,
-                        Name = file.FileName,
-                        PropertyId = propertyid,
-                        PropertyName = propertyName,
-                        FilePath = await UploadImage(basePath, file)
-                    };
-                    _context.FilesOnFileSystem.Add(fileModel);
-                    _context.SaveChanges();
-                
+                var filePath = Path.Combine(basePath, fileName + extension);
+
+                using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                    _logger.LogInformation($"{nameof(UploadToFileSystem)} {fileName} saved");
+                }
+
+                var fileModel = new FileOnFileSystemModel
+                {
+                    CreatedOn = dateTime,
+                    FileType = file.ContentType,
+                    Extension = extension,
+                    Name = file.FileName,
+                    PropertyId = propertyid,
+                    PropertyName = propertyName,
+                    FilePath = Path.Combine(internalFolder, fileName)
+                };
+                _context.FilesOnFileSystem.Add(fileModel);
+                _context.SaveChanges();
+
             }
             TempData["Message"] = "File successfully uploaded to File System";
             return RedirectToAction("Index");
@@ -74,17 +86,9 @@ namespace WebApplicationProperty.Controllers
         public async Task<IActionResult> DownloadFileFromFileSystem(int id)
         {
             var file = await _context.FilesOnFileSystem.Where(x => x.Id == id).FirstOrDefaultAsync();
-            var basePath = Path.Combine(_webHostEnvironment.WebRootPath + "\\images\\");
-            if (file == null) return null;
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(file.FilePath, FileMode.Open))
-            {
-                await stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            return File(memory, file.FileType, file.Name + file.Extension);
+            if (file == null) { return null; }
+            return File(file.FilePath, file.FileType, file.Name + file.Extension);
         }
-
 
         public async Task<IActionResult> DeleteFileFromFileSystem(int id)
         {
@@ -94,21 +98,14 @@ namespace WebApplicationProperty.Controllers
             {
                 System.IO.File.Delete(file.FilePath);
             }
+            else
+            {
+                _logger.LogInformation($"{nameof(DeleteFileFromFileSystem)} file {id} not exists {file.FilePath}");
+            }
             _context.FilesOnFileSystem.Remove(file);
             _context.SaveChanges();
             TempData["Message"] = $"Removed {file.Name + file.Extension} successfully from File System";
             return RedirectToAction("Index");
-        }
-        private async Task<string> UploadImage(string folderPath, IFormFile file)
-        {
-
-            folderPath += Guid.NewGuid().ToString() + "_" + file.FileName;
-
-            string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folderPath);
-
-            await file.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
-
-            return  folderPath;
         }
     }
 }
