@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplicationProperty.Data;
 
 namespace WebApplicationProperty.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201125175748_FileDetail")]
+    partial class FileDetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -345,37 +347,29 @@ namespace WebApplicationProperty.Data.Migrations
                     b.ToTable("FacilitiesProperty");
                 });
 
-            modelBuilder.Entity("WebApplicationProperty.Models.FileOnFileSystemModel", b =>
+            modelBuilder.Entity("WebApplicationProperty.Models.FileDetail", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Extension")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FilePath")
+                    b.Property<string>("FileName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FileType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("PropertiesPropertyId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PropertyName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("FilesOnFileSystem");
+                    b.HasIndex("PropertiesPropertyId");
+
+                    b.ToTable("FileDetails");
                 });
 
             modelBuilder.Entity("WebApplicationProperty.Models.Fixtures", b =>
@@ -697,6 +691,13 @@ namespace WebApplicationProperty.Data.Migrations
                         .HasForeignKey("PropertyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApplicationProperty.Models.FileDetail", b =>
+                {
+                    b.HasOne("WebApplicationProperty.Models.Properties", "Properties")
+                        .WithMany("FileDetails")
+                        .HasForeignKey("PropertiesPropertyId");
                 });
 
             modelBuilder.Entity("WebApplicationProperty.Models.FixturesProperty", b =>
