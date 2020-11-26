@@ -73,7 +73,7 @@ namespace WebApplicationProperty.Controllers
                     Name = file.FileName,
                     PropertyId = propertyid,
                     PropertyName = propertyName,
-                    FilePath = Path.Combine(internalFolder, fileName)
+                    FilePath = Path.Combine(internalFolder, fileName + extension)
                 };
                 _context.FilesOnFileSystem.Add(fileModel);
                 _context.SaveChanges();
