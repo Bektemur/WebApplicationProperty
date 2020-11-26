@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplicationProperty.Data;
 
 namespace WebApplicationProperty.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201126074149_FixesFileLoad")]
+    partial class FixesFileLoad
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -345,7 +347,7 @@ namespace WebApplicationProperty.Data.Migrations
                     b.ToTable("FacilitiesProperty");
                 });
 
-            modelBuilder.Entity("WebApplicationProperty.Models.FileOnFileSystemModel", b =>
+            modelBuilder.Entity("WebApplicationProperty.Models.FileOnDatabaseModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -355,10 +357,10 @@ namespace WebApplicationProperty.Data.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Extension")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("Data")
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("FilePath")
+                    b.Property<string>("Extension")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FileType")
@@ -367,15 +369,18 @@ namespace WebApplicationProperty.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PropertiesId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PropertyName")
+                    b.Property<string>("UploadedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("FilesOnFileSystem");
+                    b.ToTable("FilesOnDatabase");
                 });
 
             modelBuilder.Entity("WebApplicationProperty.Models.Fixtures", b =>

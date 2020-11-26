@@ -111,5 +111,6 @@ namespace WebApplicationProperty.Data
         public DbSet<Station> Stations { get; set; }
         public DbSet<CommonAreaProperties> CommonAreaProperties { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<FileOnFileSystemModel> FilesOnFileSystem { get; set; }
     }
 }
