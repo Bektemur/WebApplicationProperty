@@ -8,6 +8,6 @@ namespace WebApplicationProperty.Models
         [Key]
         public int StationId { get; set; }
         public string Name { get; set; }
-        public List<Properties> Properties { get; set; }
+        public List<Property> Properties { get; set; }
     }
 }

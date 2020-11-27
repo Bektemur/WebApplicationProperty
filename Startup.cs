@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApplicationProperty.Data;
+using WebApplicationProperty.Models;
 
 namespace WebApplicationProperty
 {
@@ -34,8 +35,19 @@ namespace WebApplicationProperty
                     opt => opt.EnableRetryOnFailure(5, TimeSpan.FromSeconds(30), null))
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking), sizeDbContextPool);
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
@@ -55,6 +67,11 @@ namespace WebApplicationProperty
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
+            }
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                context.Database.Migrate();
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();

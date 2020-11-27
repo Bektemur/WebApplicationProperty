@@ -10,22 +10,22 @@ using WebApplicationProperty.Models;
 
 namespace WebApplicationProperty.Controllers
 {
-    public class InteriorsController : Controller
+    public class ImprovementsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public InteriorsController(ApplicationDbContext context)
+        public ImprovementsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Interiors
+        // GET: Improvements
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Interiors.ToListAsync());
+            return View(await _context.Improvements.ToListAsync());
         }
 
-        // GET: Interiors/Details/5
+        // GET: Improvements/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,37 @@ namespace WebApplicationProperty.Controllers
                 return NotFound();
             }
 
-            var interior = await _context.Interiors
-                .FirstOrDefaultAsync(m => m.InteriorId == id);
-            if (interior == null)
+            var improvement = await _context.Improvements
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (improvement == null)
             {
                 return NotFound();
             }
 
-            return View(interior);
+            return View(improvement);
         }
 
-        // GET: Interiors/Create
+        // GET: Improvements/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Interiors/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Improvements/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("InteriorId,Name")] Interior interior)
+        public async Task<IActionResult> Create(Improvement improvement)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(interior);
+                _context.Add(improvement);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(interior);
+            return View(improvement);
         }
 
-        // GET: Interiors/Edit/5
+        // GET: Improvements/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +71,20 @@ namespace WebApplicationProperty.Controllers
                 return NotFound();
             }
 
-            var interior = await _context.Interiors.FindAsync(id);
-            if (interior == null)
+            var improvement = await _context.Improvements.FindAsync(id);
+            if (improvement == null)
             {
                 return NotFound();
             }
-            return View(interior);
+            return View(improvement);
         }
 
-        // POST: Interiors/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Improvements/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("InteriorId,Name")] Interior interior)
+        public async Task<IActionResult> Edit(int id, Improvement improvement)
         {
-            if (id != interior.InteriorId)
+            if (id != improvement.Id)
             {
                 return NotFound();
             }
@@ -97,12 +93,12 @@ namespace WebApplicationProperty.Controllers
             {
                 try
                 {
-                    _context.Update(interior);
+                    _context.Update(improvement);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InteriorExists(interior.InteriorId))
+                    if (!ImprovementExists(improvement.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +109,10 @@ namespace WebApplicationProperty.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(interior);
+            return View(improvement);
         }
 
-        // GET: Interiors/Delete/5
+        // GET: Improvements/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +120,30 @@ namespace WebApplicationProperty.Controllers
                 return NotFound();
             }
 
-            var interior = await _context.Interiors
-                .FirstOrDefaultAsync(m => m.InteriorId == id);
-            if (interior == null)
+            var improvement = await _context.Improvements
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (improvement == null)
             {
                 return NotFound();
             }
 
-            return View(interior);
+            return View(improvement);
         }
 
-        // POST: Interiors/Delete/5
+        // POST: Improvements/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var interior = await _context.Interiors.FindAsync(id);
-            _context.Interiors.Remove(interior);
+            var improvement = await _context.Improvements.FindAsync(id);
+            _context.Improvements.Remove(improvement);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InteriorExists(int id)
+        private bool ImprovementExists(int id)
         {
-            return _context.Interiors.Any(e => e.InteriorId == id);
+            return _context.Improvements.Any(e => e.Id == id);
         }
     }
 }
