@@ -11,7 +11,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplicationProperty.Data;
 using WebApplicationProperty.Models;
-using WebApplicationProperty.ViewModel;
 
 namespace WebApplicationProperty.Controllers
 {

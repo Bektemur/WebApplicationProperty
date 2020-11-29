@@ -1,8 +1,62 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    var commonImprovements = (List<Improvement>)ViewData["Improvements"];
 }
+@model WebApplicationProperty.ViewModel.IndexViewModel
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="accordion" id="accordionExample">
+                    @foreach (var impType in commonImprovements?.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList()) ?? new Dictionary<ImprovementType, List<Improvement>>())
+                    {
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse-@impType.Key" aria-controls="collapse-@impType.Key">
+                                        @impType.Key.ToString()
+                                    </button>
+                                </h2>
+                            </div>
+                        </div>
+                        <div id="collapse-@impType.Key" class="collapse" aria-labelledby="heading-@impType.Key" data-parent="#accordionExample">
+                            <div class="card-body">
+                                @foreach (var improvment in impType.Value)
+                                {
+                                    <input type="checkbox" name="selectedBasic" value="@improvment.Id" />
+                                    <span>@improvment.Name</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-sm-9">
+                @foreach (var item in Model.Property)
+                {
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+
+                    <div class="card mb-3" style="max-width: 900px;">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img src="" alt="s" style="max-height: 100px;" />
+                                <img src="" class="card-img" alt="...">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">@item.Name</h5>
+                                    <p class="card-text">@item.Description</p>
+                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                }
+            </div>
+                <div class="col-sm-3">
+
+                </div>
+            </div>
+    </div>

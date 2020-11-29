@@ -13,6 +13,7 @@ namespace WebApplicationProperty.Models
         public int PropertyId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Address { get; set; }
         public double Price { get; set; }
         public double Price_sqm { get; set; }
         public double Living_area { get; set; }
@@ -37,8 +38,8 @@ namespace WebApplicationProperty.Models
 
         public string ApplicationUserId { get; set; }
         [ForeignKey("ApplicationUserId")]
-        public ApplicationUser User { get; set; }    
-        
+        public ApplicationUser User { get; set; }
+        public virtual ICollection<FileOnFileSystemModel> FileSystemModels { get; set; }
         public virtual ICollection<ImprovementToProperty> Improvements { get; set; }
     }
 }
