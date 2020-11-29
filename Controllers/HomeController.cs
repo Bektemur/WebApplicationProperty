@@ -22,7 +22,7 @@ namespace WebApplicationProperty.Controllers
 
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page = 1, int take = 25)
         {
             var applicationDbContext = _context.Properties.Include(p => p.User).Include(p => p.Project).Include(p => p.Station).Include(p => p.TypeProperties);
             List<string> date = new List<string>();
@@ -30,10 +30,14 @@ namespace WebApplicationProperty.Controllers
             {
                 date.Add(getRelativeDateTime(item.Public_date));
             }
-            IndexViewModel indexViewModel = new IndexViewModel() 
-            { Property = _context.Properties, FileSystemModels = _context.FilesOnFileSystem };
+            IndexViewModel indexViewModel = new IndexViewModel()
+            {
+                Property = _context.Properties.Include(x => x.FileSystemModels).Skip(page - 1).Take(take).ToList(),
+                Improvements = _context.Improvements.ToList(),
+                Page = page,
+                Take = take
+            };
             ViewData["getRelative"] = date;
-            ViewData["Improvements"] = _context.Improvements.ToList();
             return View(indexViewModel);
         }
 

@@ -8,8 +8,10 @@ namespace WebApplicationProperty.ViewModel
 {
     public class IndexViewModel
     {
+        public int Page { get; set; }
+        public int Take { get; set; }
         public IEnumerable <Property> Property { get; set; }
-        public IEnumerable<FileOnFileSystemModel> FileSystemModels { get; set; }
+        public IEnumerable<Improvement> Improvements { get; set; }
         public string UpdateDate { get; set; }
         public string PublicDate { get; set; }
     }

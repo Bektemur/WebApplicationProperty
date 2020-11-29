@@ -1,62 +1,82 @@
-﻿@{
+﻿@using WebApplicationProperty.Models
+@using WebApplicationProperty.ViewModel
+@{
     ViewData["Title"] = "Home Page";
-    var commonImprovements = (List<Improvement>)ViewData["Improvements"];
 }
-@model WebApplicationProperty.ViewModel.IndexViewModel
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="accordion" id="accordionExample">
-                    @foreach (var impType in commonImprovements?.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList()) ?? new Dictionary<ImprovementType, List<Improvement>>())
-                    {
-                        <div class="card">
-                            <div class="card-header" id="headingOne">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse-@impType.Key" aria-controls="collapse-@impType.Key">
-                                        @impType.Key.ToString()
-                                    </button>
-                                </h2>
-                            </div>
-                        </div>
-                        <div id="collapse-@impType.Key" class="collapse" aria-labelledby="heading-@impType.Key" data-parent="#accordionExample">
-                            <div class="card-body">
-                                @foreach (var improvment in impType.Value)
-                                {
-                                    <input type="checkbox" name="selectedBasic" value="@improvment.Id" />
-                                    <span>@improvment.Name</span>
-                                }
-                            </div>
-                        </div>
-                    }
+@model IndexViewModel
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3" id="improvement">
+            @foreach (var impType in Model?.Improvements?.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList()) ?? new Dictionary<ImprovementType, List<Improvement>>())
+            {
+                <div class="card">
+                    <div class="card-header dropdown-toggle" id="heading-@impType.Key" style="padding: 0.1em 1.25em;">
+                        <button class="btn btn-link text-left w-100" data-toggle="collapse" data-target="#collapse-@impType.Key" aria-controls="collapse-@impType.Key">
+                            @impType.Key.ToString()
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div class="col-sm-9">
-                @foreach (var item in Model.Property)
-                {
-
-
-
-                    <div class="card mb-3" style="max-width: 900px;">
-                        <div class="row no-gutters">
-                            <div class="col-md-4">
-                                <img src="" alt="s" style="max-height: 100px;" />
-                                <img src="" class="card-img" alt="...">
+                <div id="collapse-@impType.Key" class="collapse" aria-labelledby="heading-@impType.Key" data-parent="#improvement">
+                    <div class="card-body border">
+                        @foreach (var improvment in impType.Value)
+                        {
+                            <div>
+                                <input type="checkbox" name="selectedBasic" value="@improvment.Id" />
+                                <span>@improvment.Name</span>
                             </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">@item.Name</h5>
-                                    <p class="card-text">@item.Description</p>
-                                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                                </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-sm-9">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item @(Model.Page==1?"active":"")"><a class="page-link" href="?page=1&take=25">1</a></li>
+                    <li class="page-item @(Model.Page==2?"active":"")"><a class="page-link" href="?page=2&take=25">2</a></li>
+                    <li class="page-item @(Model.Page==3?"active":"")"><a class="page-link" href="?page=3&take=25">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+            @foreach (var item in Model.Property)
+            {
+                <div class="card mb-3">
+                    <div class="row no-gutters">
+                        <div class="col-md-3 text-center">
+                            @foreach (var image in item.FileSystemModels)
+                            {
+                                <img src="~/@image.FilePath" alt="@image.Name" class="img-thumbnail" style="max-height:120px;" />
+                            }
+                        </div>
+                        <div class="col-md-9 p-2">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name</h5>
+                                <p class="card-text">@item.Description</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                <a asp-area="" asp-controller="Property" asp-action="Details" asp-route-id="@item.PropertyId" class="btn btn-primary float-right">Details</a>
                             </div>
                         </div>
                     </div>
-
-
-                }
-            </div>
-                <div class="col-sm-3">
-
                 </div>
-            </div>
+            }
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item @(Model.Page==1?"active":"")"><a class="page-link" href="?page=1&take=25">1</a></li>
+                    <li class="page-item @(Model.Page==2?"active":"")"><a class="page-link" href="?page=2&take=25">2</a></li>
+                    <li class="page-item @(Model.Page==3?"active":"")"><a class="page-link" href="?page=3&take=25">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
+</div>
