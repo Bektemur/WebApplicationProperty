@@ -44,7 +44,7 @@ namespace WebApplicationProperty.Controllers
                 .Include(p => p.Project)
                 .Include(p => p.Station)
                 .Include(p => p.TypeProperties)
-                .Include(p => p.Improvements).ThenInclude(x => x.Improvement)
+                .Include(p => p.Improvements).ThenInclude(x => x.Improvement).Include(p => p.FileSystemModels)
                 .FirstOrDefaultAsync(m => m.PropertyId == id);
             if (properties == null)
             {
