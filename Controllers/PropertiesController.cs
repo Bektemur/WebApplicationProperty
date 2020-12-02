@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationProperty.Data;
 using WebApplicationProperty.Models;
-using WebApplicationProperty.ViewModel;
 
 namespace WebApplicationProperty.Controllers
 {
@@ -45,7 +44,7 @@ namespace WebApplicationProperty.Controllers
                 .Include(p => p.Project)
                 .Include(p => p.Station)
                 .Include(p => p.TypeProperties)
-                .Include(p => p.Improvements).ThenInclude(x => x.Improvement)
+                .Include(p => p.Improvements).ThenInclude(x => x.Improvement).Include(p => p.FileSystemModels)
                 .FirstOrDefaultAsync(m => m.PropertyId == id);
             if (properties == null)
             {
@@ -75,22 +74,6 @@ namespace WebApplicationProperty.Controllers
             properties.ApplicationUserId = currentUserID;
             properties.Public_date = DateTime.UtcNow;
             properties.Update_date = DateTime.UtcNow;
-            //if (properties.GalleryFiles != null)
-            //{
-            //    string folder = "images/";
-
-            //    properties.FileDetails = new List<FileDetail>();
-
-            //    foreach (var file in properties.GalleryFiles)
-            //    {
-            //        var gallery = new FileDetail()
-            //        {
-            //            Name = file.Name,
-            //            URL = await UploadImage(folder, file)
-            //        };
-            //        properties.FileDetails.Add(gallery);
-            //    }
-            //}
             if (ModelState.IsValid)
             {
                 _context.Add(properties);
