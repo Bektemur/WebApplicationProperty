@@ -5,6 +5,16 @@
 }
 
 <h3>@ViewData["Title"]</h3>
+<table>
+    
+    <tr>
+        <td><a class="btn btn-info" asp-controller="Contract" asp-action="Index">Contract type</a></td>
+        <td><a class="btn btn-info" asp-controller="Projects" asp-action="Index">Projects</a></td>
+        <td><a class="btn btn-info"  asp-controller="Stations" asp-action="Index">Stations</a></td>
+        <td><a class="btn btn-info" asp-controller="TypeProperties" asp-action="Index">Type properties</a></td>
+    </tr>
+</table>
+
 <p>
     <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>

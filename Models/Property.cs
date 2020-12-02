@@ -16,6 +16,7 @@ namespace WebApplicationProperty.Models
         public string Address { get; set; }
         public double Price { get; set; }
         public double Price_sqm { get; set; }
+        public double Price_rent { get; set; }
         public double Living_area { get; set; }
         public double Land_area { get; set; }
         public int Bathrooms { get; set; }
@@ -35,6 +36,9 @@ namespace WebApplicationProperty.Models
         public int StationId { get; set; }
         [ForeignKey("StationId")]
         public Station Station { get; set; }
+        public int ContractTypeId { get; set; }
+        [ForeignKey("ContractTypeId")]
+        public ContractType ContractType { get; set; }
 
         public string ApplicationUserId { get; set; }
         [ForeignKey("ApplicationUserId")]

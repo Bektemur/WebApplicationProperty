@@ -21,6 +21,8 @@ namespace WebApplicationProperty.Data
             modelBuilder.Entity<Project>().HasMany(c => c.Properties).WithOne(e => e.Project);
             modelBuilder.Entity<Station>().HasMany(c => c.Properties).WithOne(e => e.Station);
             modelBuilder.Entity<TypeProperty>().HasMany(c => c.Properties).WithOne(e => e.TypeProperties);
+            modelBuilder.Entity<ContractType>().HasMany(c => c.Properties).WithOne(e => e.ContractType);
+            modelBuilder.Entity<ApplicationUser>().Property(e => e.Id).ValueGeneratedOnAdd();
         }
 
         public DbSet<Project> Projects { get; set; }
@@ -29,5 +31,7 @@ namespace WebApplicationProperty.Data
         public DbSet<Station> Stations { get; set; }
         public DbSet<FileOnFileSystemModel> FilesOnFileSystem { get; set; }
         public DbSet<Improvement> Improvements { get; set; }
+        public DbSet<ContractType> ContractTypes { get; set; }
+
     }
 }
