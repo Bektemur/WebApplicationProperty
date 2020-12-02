@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,14 +25,14 @@ namespace WebApplicationProperty.Controllers
             _context = context;
             _webHostEnvironment = webHostEnvironment;
         }
-
+        [Authorize]
         // GET: Properties
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Properties.Include(p => p.User).Include(p => p.Project).Include(p => p.Station).Include(p => p.TypeProperties);
+            var applicationDbContext = _context.Properties.Include(p => p.User).Include(p=>p.ContractType).Include(p => p.Project).Include(p => p.Station).Include(p => p.TypeProperties);
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize]
         // GET: Properties/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -44,6 +45,7 @@ namespace WebApplicationProperty.Controllers
                 .Include(p => p.Project)
                 .Include(p => p.Station)
                 .Include(p => p.TypeProperties)
+                .Include(p => p.ContractType)
                 .Include(p => p.Improvements).ThenInclude(x => x.Improvement).Include(p => p.FileSystemModels)
                 .FirstOrDefaultAsync(m => m.PropertyId == id);
             if (properties == null)
@@ -53,7 +55,7 @@ namespace WebApplicationProperty.Controllers
 
             return View(properties);
         }
-
+        [Authorize]
         // GET: Properties/Create
         public IActionResult Create()
         {
@@ -61,6 +63,7 @@ namespace WebApplicationProperty.Controllers
             ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Name");
             ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "Name");
             ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "Name");
+            ViewData["ContractTypeId"] = new SelectList(_context.ContractTypes, "ContractTypeId", "Name");
             ViewData["Improvements"] = _context.Improvements.ToList();
             return View();
         }
@@ -80,13 +83,15 @@ namespace WebApplicationProperty.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            //properties.Improvements = _context.Properties.Include(p => p.Improvements).ThenInclude(x => x.Improvement).ToList();
             ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", properties.ProjectId);
             ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "StationId", properties.StationId);
             ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "TypePropertyId", properties.TypePropertyId);
+            ViewData["ContractTypeId"] = new SelectList(_context.ContractTypes, "ContractTypeId", "Name", properties.ContractTypeId);
             ViewData["Improvements"] = _context.Improvements.ToList();
             return View(properties);
         }
-
+        [Authorize]
         // GET: Properties/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -104,6 +109,7 @@ namespace WebApplicationProperty.Controllers
             ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", properties.ProjectId);
             ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "StationId", properties.StationId);
             ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "TypePropertyId", properties.TypePropertyId);
+            ViewData["ContractTypeId"] = new SelectList(_context.ContractTypes, "ContractTypeId", "Name", properties.ContractTypeId);
             return View(properties);
         }
 
@@ -141,9 +147,10 @@ namespace WebApplicationProperty.Controllers
             ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", properties.ProjectId);
             ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "StationId", properties.StationId);
             ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "TypePropertyId", properties.TypePropertyId);
+            ViewData["ContractTypeId"] = new SelectList(_context.ContractTypes, "ContractTypeId", "Name", properties.ContractTypeId);
             return View(properties);
         }
-
+        [Authorize]
         // GET: Properties/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -157,6 +164,7 @@ namespace WebApplicationProperty.Controllers
                 .Include(p => p.Project)
                 .Include(p => p.Station)
                 .Include(p => p.TypeProperties)
+                .Include(p => p.ContractType)
                 .FirstOrDefaultAsync(m => m.PropertyId == id);
             if (properties == null)
             {

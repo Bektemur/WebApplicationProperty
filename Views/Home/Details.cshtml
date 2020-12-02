@@ -98,7 +98,7 @@
 
 
                     <div class="card-body">
-                        <h5 class="card-title">About the unit</h5>
+                        <h5 class="card-title">About the unit</h5>  <h4 class="card-title">@Model.Property.Price  THB</h4>
                         <p class="card-text" style="background-color:silver"><b>Property Id:</b> @Model.Property.PropertyId &nbsp; <b>Posted:</b> @getRelativeDateTime(Model.Property.Public_date)    &nbsp; <b>Last update:</b> @getRelativeDateTime(Model.Property.Update_date)</p>
                         <p class="card-text">@Model.Property.Description</p>
                         @foreach (var item in @Model.Property.Improvements)

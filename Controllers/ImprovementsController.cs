@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +19,13 @@ namespace WebApplicationProperty.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Improvements
         public async Task<IActionResult> Index()
         {
             return View(await _context.Improvements.ToListAsync());
         }
-
+        [Authorize]
         // GET: Improvements/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -42,7 +43,7 @@ namespace WebApplicationProperty.Controllers
 
             return View(improvement);
         }
-
+        [Authorize]
         // GET: Improvements/Create
         public IActionResult Create()
         {
@@ -62,7 +63,7 @@ namespace WebApplicationProperty.Controllers
             }
             return View(improvement);
         }
-
+        [Authorize]
         // GET: Improvements/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -111,7 +112,7 @@ namespace WebApplicationProperty.Controllers
             }
             return View(improvement);
         }
-
+        [Authorize]
         // GET: Improvements/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

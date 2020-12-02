@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,22 +10,22 @@ using WebApplicationProperty.Models;
 
 namespace WebApplicationProperty.Controllers
 {
-    public class ProjectsController : Controller
+    public class ContractController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ProjectsController(ApplicationDbContext context)
+        public ContractController(ApplicationDbContext context)
         {
             _context = context;
         }
-        [Authorize]
-        // GET: Projects
+
+        // GET: Contract
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Projects.ToListAsync());
+            return View(await _context.ContractTypes.ToListAsync());
         }
-        [Authorize]
-        // GET: Projects/Details/5
+
+        // GET: Contract/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,39 +33,39 @@ namespace WebApplicationProperty.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects
-                .FirstOrDefaultAsync(m => m.ProjectId == id);
-            if (project == null)
+            var contractType = await _context.ContractTypes
+                .FirstOrDefaultAsync(m => m.ContractTypeId == id);
+            if (contractType == null)
             {
                 return NotFound();
             }
 
-            return View(project);
+            return View(contractType);
         }
-        [Authorize]
-        // GET: Projects/Create
+
+        // GET: Contract/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Projects/Create
+        // POST: Contract/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectId,Name")] Project project)
+        public async Task<IActionResult> Create([Bind("ContractTypeId,Name")] ContractType contractType)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(project);
+                _context.Add(contractType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(project);
+            return View(contractType);
         }
-        [Authorize]
-        // GET: Projects/Edit/5
+
+        // GET: Contract/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,22 +73,22 @@ namespace WebApplicationProperty.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.FindAsync(id);
-            if (project == null)
+            var contractType = await _context.ContractTypes.FindAsync(id);
+            if (contractType == null)
             {
                 return NotFound();
             }
-            return View(project);
+            return View(contractType);
         }
 
-        // POST: Projects/Edit/5
+        // POST: Contract/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProjectId,Name")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("ContractTypeId,Name")] ContractType contractType)
         {
-            if (id != project.ProjectId)
+            if (id != contractType.ContractTypeId)
             {
                 return NotFound();
             }
@@ -98,12 +97,12 @@ namespace WebApplicationProperty.Controllers
             {
                 try
                 {
-                    _context.Update(project);
+                    _context.Update(contractType);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectExists(project.ProjectId))
+                    if (!ContractTypeExists(contractType.ContractTypeId))
                     {
                         return NotFound();
                     }
@@ -114,10 +113,10 @@ namespace WebApplicationProperty.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(project);
+            return View(contractType);
         }
-        [Authorize]
-        // GET: Projects/Delete/5
+
+        // GET: Contract/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,30 +124,30 @@ namespace WebApplicationProperty.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects
-                .FirstOrDefaultAsync(m => m.ProjectId == id);
-            if (project == null)
+            var contractType = await _context.ContractTypes
+                .FirstOrDefaultAsync(m => m.ContractTypeId == id);
+            if (contractType == null)
             {
                 return NotFound();
             }
 
-            return View(project);
+            return View(contractType);
         }
 
-        // POST: Projects/Delete/5
+        // POST: Contract/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var project = await _context.Projects.FindAsync(id);
-            _context.Projects.Remove(project);
+            var contractType = await _context.ContractTypes.FindAsync(id);
+            _context.ContractTypes.Remove(contractType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProjectExists(int id)
+        private bool ContractTypeExists(int id)
         {
-            return _context.Projects.Any(e => e.ProjectId == id);
+            return _context.ContractTypes.Any(e => e.ContractTypeId == id);
         }
     }
 }

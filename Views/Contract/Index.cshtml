@@ -1,10 +1,11 @@
-﻿@model IEnumerable<WebApplicationProperty.Models.Project>
+﻿@model IEnumerable<WebApplicationProperty.Models.ContractType>
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -24,9 +25,9 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ProjectId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProjectId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProjectId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ContractTypeId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ContractTypeId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ContractTypeId">Delete</a>
             </td>
         </tr>
 }
