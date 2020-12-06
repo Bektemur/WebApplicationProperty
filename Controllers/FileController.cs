@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebApplicationProperty.Data;
 using WebApplicationProperty.Models;
+using WebApplicationProperty.ViewModel;
 
 namespace WebApplicationProperty.Controllers
 {
@@ -28,14 +29,32 @@ namespace WebApplicationProperty.Controllers
             _logger = loggerFactory.CreateLogger<FileController>();
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index(int page = 1, int take = 25, int id = 0)
+        {
+            var applicationDbContext = _context.Properties.Include(p => p.User).Include(p => p.Project).Include(p => p.Station).Include(p => p.TypeProperties);
+
+            IndexViewModel indexViewModel = new IndexViewModel()
+            {
+                ListProperty = _context.Properties.Include(x => x.FileSystemModels).Skip(page - 1).Take(take).ToList(),
+                Improvements = _context.Improvements.ToList(),
+                Page = page,
+                Take = take,
+                Property = _context.Properties
+                .Include(p => p.Project)
+                .Include(p => p.Station)
+                .Include(p => p.TypeProperties)
+                .Include(p => p.Improvements).ThenInclude(x => x.Improvement).Include(p => p.FileSystemModels)
+                .FirstOrDefault(m => m.PropertyId == id)
+            };
+            return View(indexViewModel);
+        }
+        public async Task<IActionResult> Create()
         {
             var fileuploadViewModel = await LoadAllFiles();
             ViewBag.Message = TempData["Message"];
-            ViewData["PropertyId"] = new SelectList(_context.Properties, "PropertyId", "Name");
+            ViewData["PropertyId"] = new SelectList(_context.Properties.Where(v=>v.FileSystemModels.Count == 0).ToList(), "PropertyId", "Name");
             return View(fileuploadViewModel);
         }
-
         private async Task<Models.FileUploadViewModel> LoadAllFiles()
         {
             // move This Method for a Service Layer
@@ -43,7 +62,20 @@ namespace WebApplicationProperty.Controllers
             viewModel.FileOnFileSystem = await _context.FilesOnFileSystem.ToListAsync();
             return viewModel;
         }
-
+        private async Task<Models.FileUploadViewModel> LoadAllFilesofProperty(int? id)
+        {
+            // move This Method for a Service Layer
+            var viewModel = new Models.FileUploadViewModel();
+            viewModel.FileOnFileSystem = await _context.FilesOnFileSystem.Where(v=>v.PropertyId == id).ToListAsync();
+            return viewModel;
+        }
+        public async Task<ActionResult> Edit(int? id)
+        {
+            var fileuploadViewModel = await LoadAllFilesofProperty(id);
+            ViewBag.Message = TempData["Message"];
+            ViewData["PropertyId"] = new SelectList(_context.Properties.Where(v => v.PropertyId == id).ToList(), "PropertyId", "Name");
+            return View(fileuploadViewModel);
+        }
         [HttpPost]
         public async Task<IActionResult> UploadToFileSystem(List<IFormFile> files, int propertyid)
         {

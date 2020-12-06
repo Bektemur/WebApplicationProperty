@@ -10,6 +10,11 @@
     <title>@ViewData["Title"] - @projectName</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script>
+        $(function () {
+            $('.selectpicker').selectpicker();
+        });
+    </script>
 </head>
 <body>
     <header>
@@ -26,9 +31,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                         @if ((User.Identity.IsAuthenticated))
                         {
 
@@ -42,6 +44,13 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="File" asp-action="Index">Images</a>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Search">Properties</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About us</a>
+                        </li>
+                        
                     </ul>
                 </div>
             </div>

@@ -1,0 +1,117 @@
+﻿<style>
+    .box {
+        position: relative;
+        display: inline-block;
+    }
+
+        .box .text {
+            position: absolute;
+            z-index: 999;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+            text-align: center;
+            top: 40%;
+            font-family: Arial,sans-serif;
+            color: #fff;
+            width: 80%;
+            height: 30%;
+        }
+    .block {
+        position: relative;
+        min-height: 1px;
+        padding-left: 15px;
+        padding-right: 15px;
+        -webkit-box-direction: normal;
+        -webkit-box-orient: vertical;
+        flex-direction: column;
+        margin-bottom: 30px;
+        overflow: hidden;
+    }
+</style>
+<div class="box">
+    <img src="~/images/about.jpg" style="height: 240px; width: 100%; display: -webkit-box;  display: flex; -webkit-box-direction: normal; -webkit-box-orient: vertical; flex-direction: column; -webkit-box-align: center;  align-items: center; background-repeat: no-repeat; color: #fff; position: relative; z-index: 1; background-size: cover; background-position: center; " />
+
+    <div class="text">
+        <h1>About Us</h1>
+        <h3>Bangkok Property Solutions Co,.Ltd</h3>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Our services</h3>
+                    <br />
+                    <h4>Bangkok Property Solutions Co.,Ltd</h4><br />
+                    <p class="card-text">
+                        Bangkok Property Solutions Co.,Ltd. is Thailand's premier property service for residential and commercial properties.<br />
+
+                        ตัวแทนอสังหาริมทรัพย์ รับฝากซื้อ ขาย เช่า ให้คำปรึกษาที่อยู่อาศัย ดูแลปล่อยเช่าดูแลหลังการเช่าอย่างต่อเนื่องตลอดสัญญา<br />
+
+                        我们是泰国首屈一指的住宅和商业物业服务公司。想在泰国买，卖，租或出租房地产吗？ 请给我们留言！
+                    </p>
+                    <img src="~/images/our_service.jpg" height="500" width="850" /><br />
+                    <p class="card-text">
+                        The Thai property market can be very complicated for many property seekers. We have helped many overseas clients buy and sell their properties. Let us support and guide you through every stage of the property transaction process to achieve a satisfactory outcome for all parties.
+                        <br />
+                        We are fluent in:<br />
+                        - Thai (ภาษาไทย)<br />
+                        - English<br />
+                        - Chinese (普通话;国语;华语)<br />
+                        - Cantonese 广东话<br />
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">
+                        <img src="~/images/logo.png" height="60" width="140" style="margin-left:30px;" />
+                    </p>
+                    <p class="card-text">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-phone-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M3 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V2zm6 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                        </svg> +66 89 458 1616<br />
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-envelope-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z" />
+                        </svg>  sales@bangkokps.com<br />
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-geo-alt-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        </svg> MPS02 Midway Point MRT - Sukhumvit, Sukhumvit 21 (Asoke Road), Khlongtoey, Bangkok 10110
+                    </p>
+                </div>
+            </div>
+            <br />
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-header">
+                        Contact us
+                    </p>
+                    
+                        <form asp-action="Create" class="card-text">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Name" />
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Email" />
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Phone" />
+                            </div>
+                            <div class="form-group">
+                                <textarea type="text" class="form-control" placeholder="Message" ></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Send" class="btn btn-success" />
+                            </div>
+                        </form>
+                    
+                </div>
+            </div>
+        </div>
+       
+    </div>
+</div>
