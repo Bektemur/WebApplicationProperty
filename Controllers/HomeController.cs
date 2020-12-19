@@ -21,7 +21,25 @@ namespace WebApplicationProperty.Controllers
             _context = context;
 
         }
+        public IActionResult Search(int page = 1, int take = 25, int id = 0)
+        {
+            var applicationDbContext = _context.Properties.Include(p => p.User).Include(p => p.Project).Include(p => p.Station).Include(p => p.TypeProperties);
 
+            IndexViewModel indexViewModel = new IndexViewModel()
+            {
+                ListProperty = _context.Properties.Include(x => x.FileSystemModels).Skip(page - 1).Take(take).ToList(),
+                Improvements = _context.Improvements.ToList(),
+                Page = page,
+                Take = take,
+                Property = _context.Properties
+                .Include(p => p.Project)
+                .Include(p => p.Station)
+                .Include(p => p.TypeProperties)
+                .Include(p => p.Improvements).ThenInclude(x => x.Improvement).Include(p => p.FileSystemModels)
+                .FirstOrDefault(m => m.PropertyId == id)
+            };
+            return View(indexViewModel);
+        }
         public IActionResult Index(int page = 1, int take = 25 , int id = 0)
         {
             var applicationDbContext = _context.Properties.Include(p => p.User).Include(p => p.Project).Include(p => p.Station).Include(p => p.TypeProperties);
@@ -39,7 +57,6 @@ namespace WebApplicationProperty.Controllers
                 .Include(p => p.Improvements).ThenInclude(x => x.Improvement).Include(p => p.FileSystemModels)
                 .FirstOrDefault(m => m.PropertyId == id)
             };
-            //ViewData["getRelative"] = date;
             return View(indexViewModel);
         }
 
@@ -80,6 +97,10 @@ namespace WebApplicationProperty.Controllers
             }
 
             return View(indexViewModel);
+        }
+        public IActionResult About()
+        {
+            return View();
         }
     }
 }

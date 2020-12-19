@@ -1,68 +1,66 @@
-﻿@model FileUploadViewModel
+﻿@using WebApplicationProperty.Models
+@using WebApplicationProperty.ViewModel
+@model IndexViewModel
 @{
     ViewData["Title"] = "Index";
-    //var base64 = Convert.ToBase64String(Model.FileOnDatabaseModel.Select(v=>v.Data).ElementAt(1));
+
 }
-
-<hr />
-@if (ViewBag.Message != null)
-{
-    <div class="alert alert-sucess alert-dismissible" style="margin-top:20px">
-        @ViewBag.Message
-    </div>}
-
-<form method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        Select property
-        <select asp-for="PropertyId" name="propertyid" class="form-control" asp-items="ViewBag.PropertyId"></select>
-    </div>
-    <div class="form-group">
-        <input type="file" name="files" multiple required />
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary" asp-controller="File" asp-action="UploadToFileSystem">Upload to File System</button>
-    </div>
-
-</form>
-<hr />
-<h4>Files on File System</h4>
-@if (Model.FileOnFileSystem.Count == 0)
-{
-    <caption>No Records Found</caption> }
-else
-{
-    <caption>List of Files on File System</caption>
+<h2>List property images</h2>
+<br />
+<p><a asp-area="" asp-controller="File" asp-action="Create" class="btn btn-primary float-left">Create</a></p>
+<br />
+<div class="container">
+    <div class="row">
     <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <td>#</td>
-                <td>Image</td>
-                <td>Name</td>
-                <td>Description</td>
-                <td>File Type</td>
-                <td>Created On</td>
-                <td>Actions</td>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var file in Model.FileOnFileSystem)
-            {
-                <tr>
-                    <td>@file.Id</td>
-                    <td><img src="~/@(file.FilePath)" alt="@file.Name" style="max-height: 100px;" /></td>
-                    <td>@file.Name</td>
-                    <td>@file.PropertyName</td>
-                    <td>@file.FileType</td>
-                    <td>@file.CreatedOn</td>
-                    <td>
-                        <a type="button" class="btn btn-primary" asp-controller="File" asp-action="DownloadFileFromFileSystem" asp-route-id="@file.Id">Download</a>
-                        <a type="button" class="btn btn-danger" asp-controller="File" asp-action="DeleteFileFromFileSystem" asp-route-id="@file.Id">Delete</a>
-                    </td>
+            <tr><td>
+    <div class="col-md-10">
+            @{int count = 0; }
+        @foreach (var item in Model.ListProperty)
+        {
+            
+            <div class="card mb-1">
+                <div class="row no-gutters">
+                    <div class="col-sm-3 text-center">
+                        <div id="carouselExampleControls-@count" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img class="d-block w-100 h-75" src="~/@item.FileSystemModels.Select(v=>v.FilePath).FirstOrDefault()">
+                                </div>
+                                @foreach (var image in item.FileSystemModels)
+                                {
 
-                </tr>
-            }
 
-        </tbody>
+                                    <div class="carousel-item">
+                                        <img src="~/@image.FilePath" alt="@image.Name" class="d-block w-100 h-75" />
+                                    </div>
+                                }
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleControls-@count" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleControls-@count" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
 
-    </table>
-}
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text">@item.FileSystemModels.Count images</p>
+                            <p class="card-text"><small class="text-muted"></small></p>
+                            <p class="card-text float-right" style="background-color:silver; margin-top:-50px"> @item.Price THB</p>
+                            <a asp-area="" asp-controller="File" asp-action="Edit" asp-route-id="@item.PropertyId" class="btn btn-warning float-right">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            count++;
+        }
+    </div>
+</td>
+            </tr></table>
+    </div>
+</div>
