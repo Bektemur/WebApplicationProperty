@@ -1,11 +1,8 @@
 ﻿@model WebApplicationProperty.Models.Property
+<link rel="stylesheet" type="text/css" href="~/simditor/simditor.css" />
 
-@{
-    ViewData["Title"] = "Create Properties";
-    var commonImprovements = (List<Improvement>)ViewData["Improvements"];
-}
 
-<h4>@ViewData["Title"]</h4>
+<h4>Create Properties</h4>
 <hr />
 <div class="container">
     <form asp-action="Create">
@@ -13,6 +10,7 @@
         <div class="row">
             <div class="col-sm-4">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                 <div class="form-group">
                     <label asp-for="TypePropertyId" class="control-label">Property types</label>
                     <select asp-for="TypePropertyId" class="form-control" asp-items="ViewBag.TypePropertyId"></select>
@@ -25,10 +23,7 @@
                     <label asp-for="StationId" class="control-label">BTS/MRT station</label>
                     <select asp-for="StationId" class="form-control" asp-items="ViewBag.StationId"></select>
                 </div>
-                <div class="form-group">
-                    <label asp-for="ContractTypeId" class="control-label">Contract types</label>
-                    <select asp-for="ContractTypeId" class="form-control" asp-items="ViewBag.ContractTypeId"></select>
-                </div>
+
                 <div class="form-group">
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" />
@@ -41,13 +36,20 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
-                    <textarea asp-for="Description" class="form-control"></textarea>
+                    <textarea id="editor" autofocus asp-for="Description" class="form-control"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
+
             </div>
+
             <div class="col-sm-2">
+
+                <input type="checkbox" class="btn-check" id="btncheck1" asp-for="ForSale" />
+                <label>For sale </label>
+                <input type="checkbox" class="btn-check" id="btncheck2" asp-for="ForRent" />
+                <label>For rent</label>
                 <div class="form-group">
-                    <label asp-for="Price" class="control-label">Price sale (THB)</label>
+                    <label asp-for="Price" class="control-label">Price for sale (THB)</label>
                     <input asp-for="Price" class="form-control" />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
@@ -63,12 +65,12 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Living_area" class="control-label">Living area (sqm)</label>
-                    <input asp-for="Living_area" class="form-control" />   
+                    <input asp-for="Living_area" class="form-control" />
                     <span asp-validation-for="Living_area" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Land_area" class="control-label">Land Area (sqm)</label>
-                    <input asp-for="Land_area" class="form-control" />  
+                    <input asp-for="Land_area" class="form-control" />
                     <span asp-validation-for="Land_area" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -90,7 +92,7 @@
 
             <div class="col-sm-4">
                 <div class="accordion" id="accordionExample">
-                    @foreach (var impType in commonImprovements?.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList()) ?? new Dictionary<ImprovementType, List<Improvement>>())
+                    @foreach (var impType in ((List<Improvement>)ViewData["Improvements"])?.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList()) ?? new Dictionary<ImprovementType, List<Improvement>>())
                     {
                         <div class="card">
                             <div class="card-header" id="headingOne">
@@ -112,10 +114,10 @@
                         </div>
                     }
                 </div>
+                <div id="map" style="height: 354px; width:713px;"></div>
             </div>
 
-            <div class="col-12">
-                <hr />
+            <div class="col-sm-4">
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-success" />
                     <a asp-action="Index" class="btn btn-primary">Back to List</a>
@@ -123,7 +125,141 @@
             </div>
         </div>
     </form>
+    <div id="webkulMap" style="height: 280px;"></div>
+    <input type="text" name="latitude" value="" placeholder="latitude" id="latitude" />
+    <input type="text" name="longitude" value="" placeholder="longitude" id="longitude" />
+    <input type="text" name="city" value="" placeholder="City" id="input-city" />
+    <input type="text" name="postcode" value="" placeholder="Post Code" id="input-postcode" />
+    <input type="text" name="country_id" value="" placeholder="country" id="input-country" />
+    <input type="text" name="zone_id" value="" placeholder="zone" id="input-zone" />
+
+
+
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default" async defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANuTZsMnGyzkInWhIDTeD7huhOBu0roc8&callback=initialize&libraries=places&v=weekly"
+                async defer></script>
+        <script type="text/javascript" src="~/simditor/jquery.min.js"></script>
+        <script type="text/javascript" src="~/simditor/module.js"></script>
+        <script type="text/javascript" src="~/simditor/hotkeys.js"></script>
+        <script type="text/javascript" src="~/simditor/uploader.js"></script>
+        <script type="text/javascript" src="~/simditor/simditor.js"></script>
+         
+      
+        
+        @*<script type="text/javascript">
+            var map;
+            var marker;
+            var myLatlng = new google.maps.LatLng(your_address_latitude, your_address_longitude);
+            var geocoder = new google.maps.Geocoder();
+            var infowindow = new google.maps.InfoWindow();
+            function initialize() {
+                var mapOptions = {
+                    zoom: 3,
+                    center: myLatlng,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                };
+
+                map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                marker = new google.maps.Marker({
+                    map: map,
+                    position: myLatlng,
+                    draggable: true
+                });
+
+                google.maps.event.addListener(marker, 'dragend', function () {
+                    geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            if (results[0]) {
+                                var address_components = results[0].address_components;
+                                var components = {};
+                                jQuery.each(address_components, function (k, v1) { jQuery.each(v1.types, function (k2, v2) { components[v2] = v1.long_name }); });
+                                var city;
+                                var postal_code;
+                                var state;
+                                var country;
+
+                                if (components.locality) {
+                                    city = components.locality;
+                                }
+
+                                if (!city) {
+                                    city = components.administrative_area_level_1;
+                                }
+
+                                if (components.postal_code) {
+                                    postal_code = components.postal_code;
+                                }
+
+                                if (components.administrative_area_level_1) {
+                                    state = components.administrative_area_level_1;
+                                }
+
+                                if (components.country) {
+                                    country = components.country;
+                                }
+
+                                $.ajax({
+                                    url: 'Property/Create',
+                                    data: { state: state, country: country },
+                                    type: 'POST',
+                                    success: function (data) {
+                                        $('#input-country').val(data['country']);
+                                        $('#input-zone').val(data['zone']);
+                                    }
+                                });
+
+                                $('#input-city').val(city);
+                                $('#input-postcode').val(postal_code);
+                                $('#latitude').val(marker.getPosition().lat());
+                                $('#longitude').val(marker.getPosition().lng());
+                                infowindow.setContent(results[0].formatted_address);
+                                infowindow.open(map, marker);
+                            }
+                        }
+                    });
+                });
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>*@
+        <script type="text/javascript">
+
+            function initMap() {
+                const myLatLng = { lat: 13.7563309, lng: 100.5017651 };
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 12,
+                    center: myLatLng,
+
+                });
+                new google.maps.Marker({
+                    position: myLatLng,
+                    map,
+                    //title: "aqe",
+                    draggable: true,
+                });
+                //const marker = new google.maps.Marker({
+                //    position: myLatLng,
+                //    map,
+                //    title: "Uluru (Ayers Rock)",
+                //});
+                //marker.addListener("click", () => {
+                //    infowindow.open(map, marker);
+                //});
+
+            }
+
+            $(document).ready(function () {
+                initMap();
+                Simditor.locale = 'en-US';
+                var editor = new Simditor({
+                    textarea: $('#editor')
+                    //optional options
+                });
+            });
+
+        </script>
+    }
+
 </div>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

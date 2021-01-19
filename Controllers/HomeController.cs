@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using WebApplicationProperty.Data;
 using WebApplicationProperty.Models;
 using WebApplicationProperty.ViewModel;
@@ -77,7 +78,7 @@ namespace WebApplicationProperty.Controllers
             {
                 return NotFound();
             }
-
+            
             IndexViewModel indexViewModel = new IndexViewModel()
             {
                 ListProperty = _context.Properties.Include(x => x.FileSystemModels).Skip(page - 1).Take(take).ToList(),

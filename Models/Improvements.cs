@@ -42,7 +42,5 @@ namespace WebApplicationProperty.Models
         CommonArea = 5,
         Extra = 6,
         Other = 7,
-        Station = 8,
-        Project = 9
     }
 }
