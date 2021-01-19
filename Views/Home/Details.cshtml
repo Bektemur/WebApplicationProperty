@@ -1,5 +1,4 @@
-﻿@using WebApplicationProperty.Models
-@using WebApplicationProperty.ViewModel
+﻿@using WebApplicationProperty.ViewModel
 @model IndexViewModel
 @{
     ViewData["Title"] = "Details";
@@ -23,6 +22,7 @@
         //years ago
         return (int)(ts.TotalDays / 365.242) == 1 ? "1 Year ago" : (int)(ts.TotalDays / 365.242) + " Years ago";
     }
+    
 }
 <style>
 
@@ -100,12 +100,11 @@
                     <div class="card-body">
                         <h5 class="card-title">About the unit</h5>  <h4 class="card-title">@Model.Property.Price  THB</h4>
                         <p class="card-text" style="background-color:silver"><b>Property Id:</b> @Model.Property.PropertyId &nbsp; <b>Posted:</b> @getRelativeDateTime(Model.Property.Public_date)    &nbsp; <b>Last update:</b> @getRelativeDateTime(Model.Property.Update_date)</p>
-                        <p class="card-text">@Model.Property.Description</p>
+                        <p class="card-text">@Html.Raw(Model.Property.Description)</p>
                         @foreach (var item in @Model.Property.Improvements)
                         {   <p class="card-text">
-                        
-                            item.Improvement.Name
-                        
+
+                            @Model.Improvements.Where(r=>r.Id == item.ImprovementId).Select(s=>s.Name).FirstOrDefault()
                             </p>
                         }
 

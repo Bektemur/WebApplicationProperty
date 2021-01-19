@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplicationProperty.Data;
 
 namespace WebApplicationProperty.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210109093449_AddDefaultImprovments")]
+    partial class AddDefaultImprovments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -832,23 +834,11 @@ namespace WebApplicationProperty.Data.Migrations
                     b.Property<int>("Bedrooms")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ContractTypeId")
+                    b.Property<int>("ContractTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ForRent")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("ForSale")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("GeoLat")
-                        .HasColumnType("float");
-
-                    b.Property<double>("GeoLong")
-                        .HasColumnType("float");
 
                     b.Property<double>("Land_area")
                         .HasColumnType("float");
@@ -908,20 +898,8 @@ namespace WebApplicationProperty.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double>("GeoLat")
-                        .HasColumnType("float");
-
-                    b.Property<double>("GeoLong")
-                        .HasColumnType("float");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PlaceName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StationType")
-                        .HasColumnType("int");
 
                     b.HasKey("StationId");
 
@@ -1106,9 +1084,11 @@ namespace WebApplicationProperty.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("WebApplicationProperty.Models.ContractType", null)
+                    b.HasOne("WebApplicationProperty.Models.ContractType", "ContractType")
                         .WithMany("Properties")
-                        .HasForeignKey("ContractTypeId");
+                        .HasForeignKey("ContractTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApplicationProperty.Models.Project", "Project")
                         .WithMany("Properties")

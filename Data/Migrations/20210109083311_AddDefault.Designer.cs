@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplicationProperty.Data;
 
 namespace WebApplicationProperty.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210109083311_AddDefault")]
+    partial class AddDefault
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -290,486 +292,6 @@ namespace WebApplicationProperty.Data.Migrations
                             Id = 1,
                             Name = "Parking",
                             Type = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "TV",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Refrigerator",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Washing Machine",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Kitchen",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Balcony",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Internet",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Drying Machine",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Private garden",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Roof Terrace",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Open kitchen",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Cooker Hob & Hood",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "Closed kitchen",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Name = "Water Heater",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Name = "Common garden",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Name = "Function Room",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Name = "Common jacuzzi",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Name = "Lounge",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Name = "Restaurant",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Name = "Building security",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Name = "Garage",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Name = "Onsen Spa",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Name = "Sauna",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Name = "Cafe",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 25,
-                            Name = "Gym/Fitness",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 26,
-                            Name = "Library",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 27,
-                            Name = "Outdoor swimming pool",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 28,
-                            Name = "Spa",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 29,
-                            Name = "Children playroom",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 30,
-                            Name = "Indoor swimming pool",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 31,
-                            Name = "Lift",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 32,
-                            Name = "Playground",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 33,
-                            Name = "Steamroom",
-                            Type = 5
-                        },
-                        new
-                        {
-                            Id = 34,
-                            Name = "European",
-                            Type = 3
-                        },
-                        new
-                        {
-                            Id = 35,
-                            Name = "Industrial",
-                            Type = 3
-                        },
-                        new
-                        {
-                            Id = 36,
-                            Name = "Minimalistic",
-                            Type = 3
-                        },
-                        new
-                        {
-                            Id = 37,
-                            Name = "Modern",
-                            Type = 3
-                        },
-                        new
-                        {
-                            Id = 38,
-                            Name = "Thai",
-                            Type = 3
-                        },
-                        new
-                        {
-                            Id = 39,
-                            Name = "Not Decorated",
-                            Type = 3
-                        },
-                        new
-                        {
-                            Id = 40,
-                            Name = "Air Conditioning",
-                            Type = 4
-                        },
-                        new
-                        {
-                            Id = 41,
-                            Name = "Bathtub",
-                            Type = 4
-                        },
-                        new
-                        {
-                            Id = 42,
-                            Name = "Oven",
-                            Type = 4
-                        },
-                        new
-                        {
-                            Id = 43,
-                            Name = "Cooking gas",
-                            Type = 4
-                        },
-                        new
-                        {
-                            Id = 44,
-                            Name = "Private Pool",
-                            Type = 4
-                        },
-                        new
-                        {
-                            Id = 45,
-                            Name = "Fan",
-                            Type = 4
-                        },
-                        new
-                        {
-                            Id = 46,
-                            Name = "Stove",
-                            Type = 4
-                        },
-                        new
-                        {
-                            Id = 47,
-                            Name = "Goverment electricity meter",
-                            Type = 7
-                        },
-                        new
-                        {
-                            Id = 48,
-                            Name = "Shopping Mall",
-                            Type = 7
-                        },
-                        new
-                        {
-                            Id = 49,
-                            Name = "Public water meter",
-                            Type = 7
-                        },
-                        new
-                        {
-                            Id = 50,
-                            Name = "Golf Simulator",
-                            Type = 7
-                        },
-                        new
-                        {
-                            Id = 51,
-                            Name = "Co-Working Space",
-                            Type = 7
-                        },
-                        new
-                        {
-                            Id = 52,
-                            Name = "Cleaning service",
-                            Type = 7
-                        },
-                        new
-                        {
-                            Id = 53,
-                            Name = "Mini Market",
-                            Type = 7
-                        },
-                        new
-                        {
-                            Id = 54,
-                            Name = "Mini Market",
-                            Type = 7
-                        },
-                        new
-                        {
-                            Id = 55,
-                            Name = "Wheelchair accessible",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 56,
-                            Name = "Badminton Court",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 57,
-                            Name = "Company Registration",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 58,
-                            Name = "High Floor",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 59,
-                            Name = "Low Floor",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 60,
-                            Name = "Scenic View",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 61,
-                            Name = "BBQ Area",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 62,
-                            Name = "New Project",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 63,
-                            Name = "Pool View",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 64,
-                            Name = "Sea View",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 65,
-                            Name = "Allows Pets",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 66,
-                            Name = "Shuttle service",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 67,
-                            Name = "Jogging Track",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 68,
-                            Name = "Luxury",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 69,
-                            Name = "Park View",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 70,
-                            Name = "Rent Guarantee",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 71,
-                            Name = "Allow Short-term",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 72,
-                            Name = "City View",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 73,
-                            Name = "Lake View",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 74,
-                            Name = "Maid's Room",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 75,
-                            Name = "Penthouse",
-                            Type = 6
-                        },
-                        new
-                        {
-                            Id = 76,
-                            Name = "Partially Furnished",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 77,
-                            Name = "Fully Furnished",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 78,
-                            Name = "Needs renovation",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 79,
-                            Name = "Renovated",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 80,
-                            Name = "To be renovated",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 81,
-                            Name = "Unfurnished",
-                            Type = 1
                         });
                 });
 
@@ -832,23 +354,11 @@ namespace WebApplicationProperty.Data.Migrations
                     b.Property<int>("Bedrooms")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ContractTypeId")
+                    b.Property<int>("ContractTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ForRent")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("ForSale")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("GeoLat")
-                        .HasColumnType("float");
-
-                    b.Property<double>("GeoLong")
-                        .HasColumnType("float");
 
                     b.Property<double>("Land_area")
                         .HasColumnType("float");
@@ -908,20 +418,8 @@ namespace WebApplicationProperty.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double>("GeoLat")
-                        .HasColumnType("float");
-
-                    b.Property<double>("GeoLong")
-                        .HasColumnType("float");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PlaceName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StationType")
-                        .HasColumnType("int");
 
                     b.HasKey("StationId");
 
@@ -1106,9 +604,11 @@ namespace WebApplicationProperty.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("WebApplicationProperty.Models.ContractType", null)
+                    b.HasOne("WebApplicationProperty.Models.ContractType", "ContractType")
                         .WithMany("Properties")
-                        .HasForeignKey("ContractTypeId");
+                        .HasForeignKey("ContractTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WebApplicationProperty.Models.Project", "Project")
                         .WithMany("Properties")

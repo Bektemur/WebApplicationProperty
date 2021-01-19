@@ -14,6 +14,8 @@ namespace WebApplicationProperty.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string Address { get; set; }
+        public double GeoLong { get; set; }
+        public double GeoLat { get; set; }
         public double Price { get; set; }
         public double Price_sqm { get; set; }
         public double Price_rent { get; set; }
@@ -24,7 +26,8 @@ namespace WebApplicationProperty.Models
         public int Parking { get; set; }
         public DateTime Public_date { get; set; }
         public DateTime Update_date { get; set; }
-
+        public bool ForRent { get; set; }
+        public bool ForSale { get; set; }
         public int TypePropertyId { get; set; }
         [ForeignKey("TypePropertyId")]
         public TypeProperty TypeProperties { get; set; }
@@ -36,10 +39,6 @@ namespace WebApplicationProperty.Models
         public int StationId { get; set; }
         [ForeignKey("StationId")]
         public Station Station { get; set; }
-        public int ContractTypeId { get; set; }
-        [ForeignKey("ContractTypeId")]
-        public ContractType ContractType { get; set; }
-
         public string ApplicationUserId { get; set; }
         [ForeignKey("ApplicationUserId")]
         public ApplicationUser User { get; set; }
