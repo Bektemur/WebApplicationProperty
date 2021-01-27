@@ -1,104 +1,163 @@
 ﻿@model WebApplicationProperty.Models.Property
-
 @{
     ViewData["Title"] = "Edit";
+    List<WebApplicationProperty.ViewModel.ImprovmentsViewModel> improvments = ViewBag.Improvments;
 }
+<link rel="stylesheet" type="text/css" href="~/simditor/simditor.css" />
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANuTZsMnGyzkInWhIDTeD7huhOBu0roc8&callback=initialize&libraries=places&v=weekly"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/simditor/jquery.min.js"></script>
+    <script type="text/javascript" src="~/simditor/module.js"></script>
+    <script type="text/javascript" src="~/simditor/hotkeys.js"></script>
+    <script type="text/javascript" src="~/simditor/uploader.js"></script>
+    <script type="text/javascript" src="~/simditor/simditor.js"></script>
+
+    <script type="text/javascript">
+
+        function initMap() {
+            const myLatLng = { lat: 13.7563309, lng: 100.5017651 };
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 12,
+                center: myLatLng,
+
+            });
+            const marker = new google.maps.Marker({
+                position: myLatLng,
+                map,
+                draggable: true,
+            });
+
+            marker.addListener("click", () => {
+                infowindow.open(map, marker);
+            });
+
+        }
+
+        $(document).ready(function () {
+            initMap();
+            Simditor.locale = 'en-US';
+            var editor = new Simditor({
+                textarea: $('#editor')
+                //optional options
+            });
+        });
+
+    </script>
+}
 <h1>Edit</h1>
 
 <h4>Properties</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="PropertyId" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price_sqm" class="control-label"></label>
-                <input asp-for="Price_sqm" class="form-control" />
-                <span asp-validation-for="Price_sqm" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Living_area" class="control-label"></label>
-                <input asp-for="Living_area" class="form-control" />
-                <span asp-validation-for="Living_area" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Land_area" class="control-label"></label>
-                <input asp-for="Land_area" class="form-control" />
-                <span asp-validation-for="Land_area" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Bathrooms" class="control-label"></label>
-                <input asp-for="Bathrooms" class="form-control" />
-                <span asp-validation-for="Bathrooms" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Bedrooms" class="control-label"></label>
-                <input asp-for="Bedrooms" class="form-control" />
-                <span asp-validation-for="Bedrooms" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Parking" class="control-label"></label>
-                <input asp-for="Parking" class="form-control" />
-                <span asp-validation-for="Parking" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Public_date" class="control-label"></label>
-                <input asp-for="Public_date" class="form-control" />
-                <span asp-validation-for="Public_date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Update_date" class="control-label"></label>
-                <input asp-for="Update_date" class="form-control" />
-                <span asp-validation-for="Update_date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TypePropertyId" class="control-label"></label>
-                <select asp-for="TypePropertyId" class="form-control" asp-items="ViewBag.TypePropertyId"></select>
-                <span asp-validation-for="TypePropertyId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProjectId" class="control-label"></label>
-                <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
-                <span asp-validation-for="ProjectId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StationId" class="control-label"></label>
-                <select asp-for="StationId" class="form-control" asp-items="ViewBag.StationId"></select>
-                <span asp-validation-for="StationId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApplicationUserId" class="control-label"></label>
-                <select asp-for="ApplicationUserId" class="form-control" asp-items="ViewBag.ApplicationUserId"></select>
-                <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="TypePropertyId" class="control-label">Property types</label>
+                        <select asp-for="TypePropertyId" class="form-control" asp-items="ViewBag.TypePropertyId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProjectId" class="control-label">Project</label>
+                        <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="StationId" class="control-label">BTS/MRT station</label>
+                        <select asp-for="StationId" class="form-control" asp-items="ViewBag.StationId"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Address" class="control-label"></label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea id="editor" autofocus asp-for="Description" class="form-control"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-2">
+
+                    <input type="checkbox" class="btn-check" id="btncheck1" asp-for="ForSale" />
+                    <label>For sale </label>
+                    <input type="checkbox" class="btn-check" id="btncheck2" asp-for="ForRent" />
+                    <label>For rent</label>
+                    <div class="form-group">
+                        <label asp-for="Price" class="control-label">Price for sale (THB)</label>
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price_rent" class="control-label">Price rent (THB)</label>
+                        <input asp-for="Price_rent" class="form-control" />
+                        <span asp-validation-for="Price_rent" class="text-danger"></span>
+                    </div>THB
+                    <div class="form-group">
+                        <label asp-for="Price_sqm" class="control-label">Price/sqm (THB / sqm)</label>
+                        <input asp-for="Price_sqm" class="form-control" />
+                        <span asp-validation-for="Price_sqm" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Living_area" class="control-label">Living area (sqm)</label>
+                        <input asp-for="Living_area" class="form-control" />
+                        <span asp-validation-for="Living_area" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Land_area" class="control-label">Land Area (sqm)</label>
+                        <input asp-for="Land_area" class="form-control" />
+                        <span asp-validation-for="Land_area" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Bathrooms" class="control-label"></label>
+                        <input asp-for="Bathrooms" class="form-control" />
+                        <span asp-validation-for="Bathrooms" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Bedrooms" class="control-label"></label>
+                        <input asp-for="Bedrooms" class="form-control" />
+                        <span asp-validation-for="Bedrooms" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Parking" class="control-label"></label>
+                        <input asp-for="Parking" class="form-control" />
+                        <span asp-validation-for="Parking" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="accordion" id="accordionExample">
+                        
+                            @foreach (var impType in improvments)
+                            {
+                             <input type="checkbox" name="selectedBasic" value="@impType.ImprovementId" @(Html.Raw(impType.Assigned ? "checked=\"checked\"" : "")) />
+                             <span>@impType.Name</span>
+                                        
+                            }
+                    </div>
+                    <div id="map" style="height: 354px; width:713px;"></div>
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
-    </div>
+   
 </div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

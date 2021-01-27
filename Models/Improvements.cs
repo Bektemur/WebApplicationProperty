@@ -28,6 +28,7 @@ namespace WebApplicationProperty.Models
         public int ImprovementId { get; set; }
         [ForeignKey("ImprovementId")]
         public Improvement Improvement { get; set; }
+        public ImprovementType Type { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     }

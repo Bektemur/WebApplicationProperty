@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplicationProperty.Data;
 
 namespace WebApplicationProperty.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210125065116_ImprovmentType")]
+    partial class ImprovmentType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,34 +218,19 @@ namespace WebApplicationProperty.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("WebApplicationProperty.Models.Contact", b =>
+            modelBuilder.Entity("WebApplicationProperty.Models.ContractType", b =>
                 {
-                    b.Property<int>("ContactId")
+                    b.Property<int>("ContractTypeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("ContractTypeId");
 
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ContactId");
-
-                    b.ToTable("Contacts");
+                    b.ToTable("ContractTypes");
                 });
 
             modelBuilder.Entity("WebApplicationProperty.Models.FileOnFileSystemModel", b =>
@@ -850,7 +837,7 @@ namespace WebApplicationProperty.Data.Migrations
                     b.Property<int>("Bedrooms")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ContactId")
+                    b.Property<int?>("ContractTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -908,7 +895,7 @@ namespace WebApplicationProperty.Data.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("ContactId");
+                    b.HasIndex("ContractTypeId");
 
                     b.HasIndex("ProjectId");
 
@@ -1124,9 +1111,9 @@ namespace WebApplicationProperty.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("WebApplicationProperty.Models.Contact", null)
+                    b.HasOne("WebApplicationProperty.Models.ContractType", null)
                         .WithMany("Properties")
-                        .HasForeignKey("ContactId");
+                        .HasForeignKey("ContractTypeId");
 
                     b.HasOne("WebApplicationProperty.Models.Project", "Project")
                         .WithMany("Properties")

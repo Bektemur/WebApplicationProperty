@@ -129,7 +129,7 @@ namespace WebApplicationProperty.Data
         public DbSet<Station> Stations { get; set; }
         public DbSet<FileOnFileSystemModel> FilesOnFileSystem { get; set; }
         public DbSet<Improvement> Improvements { get; set; }
-        public DbSet<ContractType> ContractTypes { get; set; }
+        public DbSet<Contact> Contacts { get;set; }
 
     }
 }
