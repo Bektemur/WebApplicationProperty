@@ -1,9 +1,15 @@
 ﻿@using WebApplicationProperty.ViewModel
-@model IndexViewModel
+@model IndexViewModel 
 @{
     ViewData["Title"] = "Details";
 }
 @{
+
+    List<string> improvments = new List<string>() {"None", "Basic", "Facilities", "Interior",
+    "Fixtures", "CommonArea", "Extra", "Other"};
+
+    var improvmentsGroup = Model.Property.Improvements.GroupBy(v=>v.Type);
+
     string getRelativeDateTime(DateTime date)
     {
         TimeSpan ts = DateTime.Now - date;
@@ -22,7 +28,7 @@
         //years ago
         return (int)(ts.TotalDays / 365.242) == 1 ? "1 Year ago" : (int)(ts.TotalDays / 365.242) + " Years ago";
     }
-    
+
 }
 <style>
 
@@ -63,7 +69,7 @@
 <div>
     <div class="container">
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-8">
                 <h3>@Model.Property.Name</h3>
                 <div class="card mb-3">
                     <div class="container">
@@ -88,7 +94,7 @@
                                         @foreach (var image in Model.Property.FileSystemModels)
                                         {
                                             count++;
-                                            <li class="list-inline-item"> <a id="carousel-selector-@count" data-slide-to="@count" data-target="#custCarousel"> <img src="~/@image.FilePath" class="img-fluid" height="300"> </a> </li>
+                                            <li class="list-inline-item"> <a id="carousel-selector-@count" data-slide-to="@count" data-target="#custCarousel"> <img src="~/@image.FilePath" class="img-fluid" height="500"> </a> </li>
                                         }
                                     </ol>
                                 </div>
@@ -98,26 +104,79 @@
 
 
                     <div class="card-body">
-                        <h5 class="card-title">About the unit</h5>  <h4 class="card-title">@Model.Property.Price  THB</h4>
-                        <p class="card-text" style="background-color:silver"><b>Property Id:</b> @Model.Property.PropertyId &nbsp; <b>Posted:</b> @getRelativeDateTime(Model.Property.Public_date)    &nbsp; <b>Last update:</b> @getRelativeDateTime(Model.Property.Update_date)</p>
-                        <p class="card-text">@Html.Raw(Model.Property.Description)</p>
-                        @foreach (var item in @Model.Property.Improvements)
-                        {   <p class="card-text">
+                        <h5 class="card-title">About the unit</h5>
+                        @if (Model.Property.ForSale && Model.Property.ForRent)
+                        {
+                            <h4 class="card-title">For rent:  @Model.Property.Price_rent  THB</h4>
+                            <h4 class="card-title">For sale:  @Model.Property.Price  THB</h4>
+                        }
+                        else if (Model.Property.ForSale)
+                        {
 
-                            @Model.Improvements.Where(r=>r.Id == item.ImprovementId).Select(s=>s.Name).FirstOrDefault()
-                            </p>
+                            <h4 class="card-title">For sale:    @Model.Property.Price  THB</h4>
+                        }
+                        else
+                        {
+                            <h4 class="card-title">For rent:    @Model.Property.Price_rent  THB</h4>
                         }
 
-                        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        <p class="card-text" style="background-color:silver"><b>Property Id:</b> @Model.Property.PropertyId &nbsp; <b>Posted:</b> @getRelativeDateTime(Model.Property.Public_date)    &nbsp; <b>Last update:</b> @getRelativeDateTime(Model.Property.Update_date)</p>
+                        <p class="card-text">@Html.Raw(Model.Property.Description)</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <b>Feature</b>
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            @foreach (var group in @improvmentsGroup)
+                            {
+                                <p class="card-text">
+                                    @foreach (var item in @group.Select(v => v.Type).Distinct())
+                                    {
+
+                                    <b>@item<br /></b>
+                                        foreach (var items in @group)
+                                        {   <ul>
+                                            <li>@Model.Improvements.Where(v => v.Id == @items.ImprovementId).Select(v => v.Name).FirstOrDefault()</li>
+                                            </ul>
+                                        }
+
+                                    }
+                                </p>
+                            }
+                        </blockquote>
                     </div>
                 </div>
             </div>
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-header">
+                    <h4>
+                    Contact Agent
+                    <br />
+                    Pattama Chamnanmor<br />
+                    Bangkok Property Solutions Co., Ltd.
+                    </h4>
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <form asp-action="Details">
+                                <input name="Name"   placeholder="Name (Required)" /><br />
+                                <input name="Email"  placeholder="Emails (Required)" /><br />
+                                <input name="Phone"  placeholder="Phone (Optional)" /><br />
+                                <textarea name="Description"  placeholder="Message (Optional)"></textarea><br />
+                                <input value="Send" type="submit" class="btn btn-success" /><br />
+                                or<br />
+                            </form>
+                                <input value="Call +66 89 458 1616" type="submit" class="btn btn-success" /><br />
+                        </blockquote>
+                    </div>
+                </div>
+                    
 
+            </div>
         </div>
     </div>
-
-
-</div>
-<div>
-  
 </div>
