@@ -35,7 +35,7 @@
             left: 0;
             right: 0;
             text-align: left;
-            top: 40%;
+            top: 20%;
             font-family: Arial,sans-serif;
             color: #fff;
             width: 80%;
@@ -44,7 +44,7 @@
 </style>
 
 <div class="box">
-    <img src="~/images/home-banner.jpg" style="width:100%;" />
+    <img src="~/images/bangkok-home-banners.jpg" style="width:100%;" />
     <div class="text">
         <h1><b>Bangkok Property</b></h1>
 
@@ -96,7 +96,7 @@
 
                                         <div class="card-body">
                                         <h5 class="card-title"><a asp-area="" asp-controller="Home" asp-action="Details" asp-route-id="@item.PropertyId">@item.Name</a></h5>
-                                        <p class="card-text">@item.Address</p>
+                                        <p class="card-text">@Html.Raw(@item.Description)</p>
                                         <p class="card-text"><small class="text-muted">Last updated @getRelativeDateTime(@item.Update_date)</small></p>
                                         <p class="card-text float-right" style="background-color:silver; margin-top:-50px"> @item.Price THB</p>
                                         </div>

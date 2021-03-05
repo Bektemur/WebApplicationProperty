@@ -4,49 +4,110 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyANuTZsMnGyzkInWhIDTeD7huhOBu0roc8&callback=initialize&libraries=places&v=weekly"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="~/simditor/jquery.min.js"></script>
     <script type="text/javascript" src="~/simditor/module.js"></script>
     <script type="text/javascript" src="~/simditor/hotkeys.js"></script>
     <script type="text/javascript" src="~/simditor/uploader.js"></script>
     <script type="text/javascript" src="~/simditor/simditor.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyD7nYxVPynhALgxmvBMe5iggBIL7RUvASk&callback=initialize&libraries=places&v=weekly">
+    </script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
+    </script>
 
     <script type="text/javascript">
-
-        function initMap() {
-            const myLatLng = { lat: 13.7563309, lng: 100.5017651 };
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 12,
-                center: myLatLng,
-
-            });
-            const marker = new google.maps.Marker({
-                position: myLatLng,
-                map,
-                draggable: true,
-            });
-
-            marker.addListener("click", () => {
-                infowindow.open(map, marker);
-            });
-
-        }
-
         $(document).ready(function () {
-            initMap();
             Simditor.locale = 'en-US';
             var editor = new Simditor({
                 textarea: $('#editor')
                 //optional options
             });
         });
+        var map;
+        var marker;
+        var myLatlng = new google.maps.LatLng(13.7563309, 100.5017651);
+        var geocoder = new google.maps.Geocoder();
+        var infowindow = new google.maps.InfoWindow();
+        function initialize() {
+            var mapOptions = {
+                zoom: 12,
+                center: myLatlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
 
+            map = new google.maps.Map(document.getElementById("webkulMap"), mapOptions);
+            marker = new google.maps.Marker({
+                map: map,
+                position: myLatlng,
+                draggable: true
+            });
+
+            google.maps.event.addListener(marker, 'dragend', function () {
+                geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        if (results[0]) {
+                            console.log(results[0]);
+                            var address_components = results[0].address_components;
+                            var components = {};
+                            jQuery.each(address_components, function (k, v1) { jQuery.each(v1.types, function (k2, v2) { components[v2] = v1.long_name }); });
+                            var street_number;
+                            var route;
+                            var sub_district;
+                            var district;
+                            var postal_code;
+                            var province;
+                            var country;
+
+
+
+                            if (components.street_number) {
+                                street_number = components.street_number;// street number
+                            }
+
+                            if (components.route) {
+                                route = components.route;// street
+                            }
+                            if (components.sublocality_level_2) {
+                                sub_district = components.sublocality_level_2; //sub district
+                            }
+                            if (components.sublocality_level_1) {
+                                district = components.sublocality_level_1; // district
+                            }
+                            if (components.postal_code) {
+                                postal_code = components.postal_code;
+                            }
+
+                            if (components.administrative_area_level_1) {
+                                province = components.administrative_area_level_1;// state, province
+                            }
+                            if (components.political) {
+                                country = components.political;// country
+                            }
+                            $('#street_number').val(street_number);
+                            $('#route').val(route);
+                            $('#subdistrict').val(sub_district);
+                            $('#province').val(province);
+                            $('#district').val(district);
+                            $('#input-country').val(country);
+                            $('#input-postcode').val(postal_code);
+                            $('#latitude').val(marker.getPosition().lat());
+                            $('#longitude').val(marker.getPosition().lng());
+                            infowindow.setContent(results[0].formatted_address);
+                            infowindow.open(map, marker);
+                        }
+                    }
+                });
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initialize);
+        
     </script>
 }
 
 <h4>Create Properties</h4>
 <hr />
+
+
+
 <div class="container">
     <form asp-action="Create">
 
@@ -72,11 +133,7 @@
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Address" class="control-label"></label>
-                    <input asp-for="Address" class="form-control" />
-                    <span asp-validation-for="Address" class="text-danger"></span>
-                </div>
+                
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
                     <textarea id="editor" autofocus asp-for="Description" class="form-control"></textarea>
@@ -157,15 +214,61 @@
                         </div>
                     }
                 </div>
-                <div id="map" style="height: 354px; width:713px;"></div>
+                <div class="form-group">
+                    <label asp-for="Number" class="control-label"></label>
+                    <input asp-for="Number" class="form-control" name="street_number" value="" placeholder="Street number" id="street_number" />
+                    <span asp-validation-for="Number" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Street" class="control-label"></label>
+                    <input asp-for="Street" type="text" class="form-control" name="route" value="" placeholder="Street" id="route" />
+                    <span asp-validation-for="Street" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="SubDistrict" class="control-label">Sub District</label>
+                    <input asp-for="SubDistrict" class="form-control" name="subdistrict" value="" placeholder="Sub district" id="subdistrict" />
+                    <span asp-validation-for="SubDistrict" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="District" class="control-label">District</label>
+                    <input asp-for="District" class="form-control" name="district" value="" placeholder="District" id="district" />
+                    <span asp-validation-for="District" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ZipCode" class="control-label">ZipCode</label>
+                    <input asp-for="ZipCode" class="form-control" name="postcode" value="" placeholder="Post Code" id="input-postcode" />
+                    <span asp-validation-for="ZipCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Province" class="control-label">Province</label>
+                    <input asp-for="Province" class="form-control" name="province" value="" placeholder="Province " id="province" />
+                    <span asp-validation-for="Province" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Country" class="control-label">Country</label>
+                    <input asp-for="Country" class="form-control" name="country" value="" placeholder="Country" id="input-country" />
+                    <span asp-validation-for="Country" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Latitude" class="control-label">Latitude</label>
+                    <input asp-for="Latitude" class="form-control" name="latitude" value="" placeholder="Latitude" id="latitude" />
+                    <span asp-validation-for="Latitude" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Longitude" class="control-label"></label>
+                    <input asp-for="Longitude" class="form-control" name="longitude" value="" placeholder="Longitude" id="longitude" />
+                    <span asp-validation-for="Longitude" class="text-danger"></span>
+                </div>
+                <div id="webkulMap" style="height: 300px; width:600px;"></div>
             </div>
 
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-success" />
-                    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-success" />
+                        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+                    </div>
                 </div>
             </div>
-        </div>
     </form>
 </div>

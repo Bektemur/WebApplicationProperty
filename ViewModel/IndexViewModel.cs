@@ -13,7 +13,5 @@ namespace WebApplicationProperty.ViewModel
         public IEnumerable <Property> ListProperty { get; set; }
         public IEnumerable<Improvement> Improvements { get; set; }
         public Property Property { get; set; }
-        public string UpdateDate { get; set; }
-        public string PublicDate { get; set; }
     }
 }

@@ -13,7 +13,6 @@ namespace WebApplicationProperty.Models
         public int PropertyId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Address { get; set; }
         public double GeoLong { get; set; }
         public double GeoLat { get; set; }
         public double Price { get; set; }
@@ -44,5 +43,14 @@ namespace WebApplicationProperty.Models
         public ApplicationUser User { get; set; }
         public virtual ICollection<FileOnFileSystemModel> FileSystemModels { get; set; }
         public virtual ICollection<ImprovementToProperty> Improvements { get; set; }
+        public string Number { get; set; }
+        public string Street { get; set; }
+        public string SubDistrict { get; set; }
+        public string District { get; set; }
+        public string ZipCode { get; set; }
+        public string Province { get; set; }
+        public string Country { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
     }
 }

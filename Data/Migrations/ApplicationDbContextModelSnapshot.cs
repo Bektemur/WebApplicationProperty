@@ -838,9 +838,6 @@ namespace WebApplicationProperty.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -853,7 +850,13 @@ namespace WebApplicationProperty.Data.Migrations
                     b.Property<int?>("ContactId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("District")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("ForRent")
@@ -871,10 +874,19 @@ namespace WebApplicationProperty.Data.Migrations
                     b.Property<double>("Land_area")
                         .HasColumnType("float");
 
+                    b.Property<string>("Latitude")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("Living_area")
                         .HasColumnType("float");
 
+                    b.Property<string>("Longitude")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Number")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Parking")
@@ -892,17 +904,29 @@ namespace WebApplicationProperty.Data.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Province")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Public_date")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("StationId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubDistrict")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("TypePropertyId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Update_date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PropertyId");
 

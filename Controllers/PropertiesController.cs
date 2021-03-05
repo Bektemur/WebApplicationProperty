@@ -69,13 +69,21 @@ namespace WebApplicationProperty.Controllers
         // POST: Properties/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Property properties, string[] selectedBasic)
+        public async Task<IActionResult> Create(Property properties, string street_number, string route, string subdistrict, string district, string postcode, string province, string country, string latitude, string longitude, string[] selectedBasic)
         {
             var currentUserID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             properties.ApplicationUserId = currentUserID;
             properties.Public_date = DateTime.UtcNow;
             properties.Update_date = DateTime.UtcNow;
-            
+            properties.Number = street_number;
+            properties.Street = route;
+            properties.SubDistrict = subdistrict;
+            properties.District = district;
+            properties.ZipCode = postcode;
+            properties.Province = province;
+            properties.Country = country;
+            properties.Latitude = latitude;
+            properties.Longitude = longitude;
             var viewmodel = new List<ImprovementToProperty>();
             foreach (var item in selectedBasic)
             {
@@ -148,7 +156,6 @@ namespace WebApplicationProperty.Controllers
                 {
                 var currentUserID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 properties.ApplicationUserId = currentUserID;
-                properties.Public_date = DateTime.UtcNow;
                 properties.Update_date = DateTime.UtcNow;
 
                 UpdateImprovmentsProperty(selectedBasic, properties);
