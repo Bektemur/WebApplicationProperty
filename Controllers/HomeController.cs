@@ -24,22 +24,19 @@ namespace WebApplicationProperty.Controllers
         }
         public IActionResult Search(string[] selectedBasic, int page = 1, int take = 25, int id = 0)
         {
-            var applicationDbContext = _context.Properties.Include(p => p.User).Include(p => p.Project).Include(p => p.Station).Include(p => p.TypeProperties);
+            IndexViewModel indexViewModel = GetIndexViewModel("", page, take, id);
+            return View(indexViewModel);
+        }
 
-            IndexViewModel indexViewModel = GetIndexViewModel(page, take, id);
-            return View(indexViewModel);
-        }
         [HttpPost]
-        public IActionResult Search(string[] selectedBasic, string search, int page = 1, int take = 25, int id = 0, int imp = 2)
+        public IActionResult SearchResult(string[] selectedBasic, string search, int page = 1, int take = 25, int id = 0)
         {
-            IndexViewModel indexViewModel = GetIndexViewModel(search);
-            return View(indexViewModel);
+            IndexViewModel indexViewModel = GetIndexViewModel(search, page, take, id);
+            return PartialView("_PropertySearchPartial", indexViewModel);
         }
-       
-        public IActionResult Index(int page = 1, int take = 25 , int id = 0)
+
+        public IActionResult Index(int page = 1, int take = 25, int id = 0)
         {
-            var applicationDbContext = _context.Properties.Include(p => p.User).Include(p => p.Project).Include(p => p.Station).Include(p => p.TypeProperties);
-            
             IndexViewModel indexViewModel = new IndexViewModel()
             {
                 ListProperty = _context.Properties.Include(x => x.FileSystemModels).Skip(page - 1).Take(take).ToList(),
@@ -60,7 +57,7 @@ namespace WebApplicationProperty.Controllers
         {
             return View();
         }
-        
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -70,7 +67,7 @@ namespace WebApplicationProperty.Controllers
         public IActionResult Details(int id, int page = 1, int take = 25)
         {
 
-            IndexViewModel indexViewModel = GetIndexViewModel(page, take, id);
+            IndexViewModel indexViewModel = GetIndexViewModel("", page, take, id);
             if (indexViewModel == null)
             {
                 return NotFound();
@@ -93,7 +90,7 @@ namespace WebApplicationProperty.Controllers
                 _context.Contacts.Add(contact);
                 await _context.SaveChangesAsync();
             }
-            IndexViewModel indexViewModel = GetIndexViewModel(page, take,id);
+            IndexViewModel indexViewModel = GetIndexViewModel("", page, take, id);
             if (indexViewModel == null)
             {
                 return NotFound();
@@ -104,36 +101,30 @@ namespace WebApplicationProperty.Controllers
         {
             return View();
         }
-        
-        public  IndexViewModel GetIndexViewModel(int page, int take, int id)
+
+        public IndexViewModel GetIndexViewModel(string search, int page = 1, int take = 25, int id = 0)
         {
-            IndexViewModel indexViewModel = new IndexViewModel()
-            {
-                ListProperty = _context.Properties.Include(x => x.FileSystemModels).Skip(page - 1).Take(take).ToList(),
-                Improvements = _context.Improvements.ToList(),
-                Page = page,
-                Take = take,
-                Property = _context.Properties
+            var propertyById = id <= 0 ? null : _context.Properties
                .Include(p => p.Project)
                .Include(p => p.Station)
                .Include(p => p.TypeProperties)
                .Include(p => p.Improvements).Include(p => p.FileSystemModels)
-               .FirstOrDefault(m => m.PropertyId == id)
-            };
-            return indexViewModel;
-        }
-        public IndexViewModel GetIndexViewModel(string search)
-        {
+               .FirstOrDefault(m => m.PropertyId == id);
+
+            var query = _context.Properties.Include(x => x.FileSystemModels).AsQueryable();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(v => v.Name.Contains(search)).AsQueryable();
+            }
+            var propertyList = query.Skip(page - 1).Take(take).ToList();
+
             IndexViewModel indexViewModel = new IndexViewModel()
             {
-                ListProperty = _context.Properties.Include(x => x.FileSystemModels).Where(v=>v.Name == search).Skip(3- 1).Take(2).ToList(),
+                ListProperty = query,
                 Improvements = _context.Improvements.ToList(),
-                Property = _context.Properties
-               .Include(p => p.Project)
-               .Include(p => p.Station)
-               .Include(p => p.TypeProperties)
-               .Include(p => p.Improvements).Include(p => p.FileSystemModels).ToList()
-               .FirstOrDefault(m => m.PropertyId == 1)
+                Page = page,
+                Take = take,
+                Property = propertyById
             };
             return indexViewModel;
         }
