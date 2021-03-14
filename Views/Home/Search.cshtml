@@ -7,79 +7,79 @@
 
 <form data-ajax="true" data-ajax-mode="replace" method="post" data-ajax-update="#theListContent" data-ajax-url="@Url.Action("SearchResult","Home")" class="w-100">
     <div class="row">
-        <div class="col-md">
+        <div class="col-md-12">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <button class="navbar-toggler" type="submit" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                        <li class="nav-item" style="margin-left:10px">
-                            <span>Contract types</span>
-                            <select name="propertyContractType">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <span>Contract types</span><br />
+                            <select class="propertyContractType">
                                 <option value="0">Any</option>
                                 <option value="1">For rent</option>
                                 <option value="2">For sale</option>
                                 <option value="3">For sale or rent</option>
                             </select>
+                            <input style="visibility:hidden" type="text" name="propertyContractType" id="propertyContractType"/>
+                        </li>
+                        <li class="nav-item">
+                            <label for="amount">Price:</label><br />
+                            <input type="text" id="amount" name="amount" readonly style="border:0; color:#f6931f; font-weight:bold; width:180px;">
+                            <div id="slider-range" style="width:150px;"></div>
+                            <input   type="text" style="visibility:hidden;" id="minvalue" name="minvalue" />
+                            <input  type="text"  style="visibility:hidden;" id="maxvalue" name="maxvalue" />                
+                        </li>
 
-                        </li>
-                        <li class="nav-item" style="margin-left:10px">
-                            <span>$ Price</span>
-                            <select id="propertyPrice" name="propertyPrice">
-                                <option value="0">Any</option>
-                                <option>< ฿2M</option>
-                                <option>฿2M-฿3M</option>
-                                <option>฿3M-฿5M</option>
-                                <option>฿5M-฿10M</option>
-                                <option>฿10M-฿14M</option>
-                                <option>฿15M-฿25M</option>
-                                <option>฿25M-฿50M</option>
-                                <option>฿50M-฿100M</option>
-                            </select>
-                        </li>
-                        <li class="nav-item" style="margin-left:10px">
-                            <span>Bedrooms</span>
+                        <li class="nav-item">
+                            <span>Bedrooms</span><br />
                             <select id="propertyBedrooms" name="propertyBedrooms">
                                 <option value="0">Any</option>
                                 <option value="1">1+ Beds </option>
-                                <option>2+ Beds</option>
-                                <option>3+ Beds </option>
-                                <option>4+ Beds</option>
+                                <option value="2">2+ Beds</option>
+                                <option value="3">3+ Beds </option>
+                                <option value="4">4+ Beds</option>
                             </select>
                         </li>
-                        <li class="nav-item" style="margin-left:10px">
-                            <span>Property types</span>
+                        <li class="nav-item">
+                            <span>Province</span><br />
+                            <select>
+                                <option value=""></option>
+                            </select>
+                        </li>
+                        <li class="nav-item">
+                            <span>Property types</span><br />
                             <select id="propertyTypes" name="propertyTypes">
-                                <option value="0">Any</option>
-                                <option value="1">Townhouse </option>
-                                <option>House</option>
-                                <option>Condominium</option>
-                                <option>Apartment</option>
-                                <option>Shop house</option>
-                                <option>Office</option>
-                                <option>Land</option>
-                                <option>Penthouse</option>
-                                <option>Retail</option>
-                                <option>Business</option>
-                                <option>Factory</option>
-                                <option>Commercial Building</option>
-                                <option>Hotel / Resort</option>
-                                <option>Other commercial</option>
+                                <option value="">Any</option>
+                                <option value="Townhouse">Townhouse </option>
+                                <option value="House">House</option>
+                                <option value="Condominium">Condominium</option>
+                                <option value="Apartment">Apartment</option>
+                                <option value="Shop house">Shop house</option>
+                                <option value="Office">Office</option>
+                                <option value="Land">Land</option>
+                                <option value="Penthouse">Penthouse</option>
+                                <option value="Retail">Retail</option>
+                                <option value="Business">Business</option>
+                                <option value="Factory">Factory</option>
+                                <option value="Commercial Building">Commercial Building</option>
+                                <option value="Hotel / Resort">Hotel / Resort</option>
+                                <option value="Other commercial">Other commercial</option>
                             </select>
                         </li>
                     </ul>
                     <div class="form-inline my-2 my-lg-0">
                         <input class="form-control mr-sm-2" type="text" id="search" name="search" placeholder="Search" aria-label="Search">
-                        <input class="btn btn-outline-success my-2 my-sm-0" type="submit" id="submitFormBtn" />
+                        <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search" id="submitFormBtn" />
                     </div>
                 </div>
             </nav>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-3" id="improvement">
+        @*<div class="col-sm-3" id="improvement">
             @foreach (var impType in Model?.Improvements?.GroupBy(x => x.Type).ToDictionary(x => x.Key, x => x.ToList()) ?? new Dictionary<ImprovementType, List<Improvement>>())
             {
                 <div class="card">
@@ -101,8 +101,7 @@
                     </div>
                 </div>
             }
-        </div>
-        @*<p id="rData"></p>*@
+        </div>*@
         <div class="col-sm-9">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
@@ -141,4 +140,59 @@
 @section Scripts
 {
     <script src="~/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        var min = 0;
+        var max = 150000;
+         document.getElementById("minvalue").value = 0; 
+         document.getElementById("maxvalue").value = 150000; 
+       @* $(document).ready(function(){
+            $("select.propertyContractType").change(function(){
+            var propertyContractType = $(this).children("option:selected").val();
+            document.getElementById("propertyContractType").value = propertyContractType;
+           
+            alert(propertyContractType);
+            if(propertyContractType == 1){
+                document.getElementById("minvalue").value = 9999; 
+                document.getElementById("maxvalue").value = 150000; 
+                 $('#slider-range').slider("option", "max", 150000);
+            }
+            else if(propertyContractType == 2){
+                min = 2;
+                max = 100;
+                document.getElementById("minvalue").value = 2; 
+                document.getElementById("maxvalue").value = 150; 
+                 $('#slider-range').slider("option", "max", 150);
+            }
+            else{
+                document.getElementById("minvalue").value = 2; 
+                document.getElementById("maxvalue").value = 150; 
+            }
+        });
+        });*@
+        $(function () {
+            $("#slider-range").slider({
+                range: true,
+                min: min,
+                max: max,
+                values: [min, max],
+                slide: function (event, ui) {
+                    $("#amount").val("฿" + ui.values[0] + "  - ฿" + ui.values[1]+" ");
+                    $("#maxvalue").val(ui.values[1]);
+                    $("#minvalue").val(ui.values[0]);
+                },
+            }); 
+            
+            $("#amount").val("฿" + $("#slider-range").slider("values", 0) +
+                " - ฿" + $("#slider-range").slider("values", 1)+"");
+             $("#maxvalue").slider('values',0,$(this).val());
+             $("#minvalue").slider('values',0,$(this).val());
+        });
+       
+        
+        
+    </script>
 }
