@@ -24,13 +24,14 @@ namespace WebApplicationProperty.Controllers
         }
         public async Task<IActionResult> Search(int[] selectedBasic, int page = 1, int take = 25, int id = 0)
         {
-            IndexViewModel indexViewModel = await GetIndexViewModel(selectedBasic,0,"",0,0,0, "", page, take, id);
+            IndexViewModel indexViewModel = await GetIndexViewModel(selectedBasic, 0, "", 0, 0, 0, "", page, take, id);
             return View(indexViewModel);
         }
-        [HttpPost]
-        public async Task<IActionResult> SearchResult(int[] selectedBasic, int propertyContractType, string propertyTypes, int propertyBedrooms, double minvalue, double maxvalue, string search, int page = 1, int take = 25, int id = 0)
+        [HttpGet]
+        public async Task<IActionResult> SearchResult(IndexViewModelRequest model)
         {
-            IndexViewModel indexViewModel = await GetIndexViewModel(selectedBasic, propertyContractType, propertyTypes, propertyBedrooms, minvalue, maxvalue, search, page, take, id);
+            IndexViewModel indexViewModel = await GetIndexViewModel(model.SelectedBasic, model.PropertyContractType, model.propertyTypes,
+                model.propertyBedrooms, model.minvalue, model.maxvalue, model.search, model.page, model.take, model.id);
             return PartialView("_PropertySearchPartial", indexViewModel);
         }
 
@@ -65,7 +66,7 @@ namespace WebApplicationProperty.Controllers
         }
         public async Task<IActionResult> Details(int[] selectImropments, int id, int page = 1, int take = 25)
         {
-            IndexViewModel indexViewModel = await GetIndexViewModel(selectImropments,0,"",0,0,0, "", page, take, id);
+            IndexViewModel indexViewModel = await GetIndexViewModel(selectImropments, 0, "", 0, 0, 0, "", page, take, id);
             if (indexViewModel == null)
             {
                 return NotFound();
@@ -89,7 +90,7 @@ namespace WebApplicationProperty.Controllers
                 _context.Contacts.Add(contact);
                 await _context.SaveChangesAsync();
             }
-            IndexViewModel indexViewModel = await GetIndexViewModel(selectedImprovments,0,"", 0,0,0,"", page, take, id);
+            IndexViewModel indexViewModel = await GetIndexViewModel(selectedImprovments, 0, "", 0, 0, 0, "", page, take, id);
             if (indexViewModel == null)
             {
                 return NotFound();
@@ -101,8 +102,8 @@ namespace WebApplicationProperty.Controllers
             return View();
         }
 
-        
-        public async Task<IndexViewModel> GetIndexViewModel(int[] selectedImprovments, int propertyContractType,string propertyTypes, int propertyBedrooms, double minvalue, double maxvalue, string search, int page = 1, int take = 25, int id = 0)
+
+        public async Task<IndexViewModel> GetIndexViewModel(int[] selectedImprovments, PropertyContractType propertyContractType, string propertyTypes, int propertyBedrooms, double minvalue, double maxvalue, string search, int page = 1, int take = 25, int id = 0)
         {
             var propertyById = id <= 0 ? null : _context.Properties
                .Include(p => p.Project)
@@ -116,43 +117,44 @@ namespace WebApplicationProperty.Controllers
             {
                 query = query.Where(v => v.Name.Contains(search)).AsQueryable();
             }
-            if (selectedImprovments.Length > 0)
+            if (selectedImprovments != null && selectedImprovments.Length > 0)
             {
                 query = query.Where(u => u.Improvements.Any(x => selectedImprovments.Contains(x.ImprovementId))).AsQueryable();
             }
-            if (propertyContractType == 1)
+            if (propertyContractType == PropertyContractType.ForRent)
             {
-                query = query.Where(c=>c.ForRent);
+                query = query.Where(c => c.ForRent);
             }
-            if (propertyContractType == 2)
+            if (propertyContractType == PropertyContractType.ForSale)
             {
-                query = query.Where(c=>c.ForSale);
+                query = query.Where(c => c.ForSale);
             }
-            if( propertyTypes != null)
+            if (propertyTypes != null)
             {
-                query = query.Where(c=>c.TypeProperties.Name.Contains(propertyTypes));
+                query = query.Where(c => c.TypeProperties.Name.Contains(propertyTypes));
             }
             if (propertyBedrooms != 0)
             {
-                query = query.Where(c=>c.Bedrooms == propertyBedrooms);
+                query = query.Where(c => c.Bedrooms == propertyBedrooms);
             }
-            if (maxvalue>0 && minvalue>0 && propertyContractType == 1)
+            if (maxvalue > 0 && minvalue > 0 && propertyContractType == PropertyContractType.ForRent)
             {
-                query = query.Where(c=>c.Price_rent <= maxvalue && c.Price_rent >= minvalue);
+                query = query.Where(c => c.Price_rent <= maxvalue && c.Price_rent >= minvalue);
             }
-            if (maxvalue>0 && minvalue>0)
+            if (maxvalue > 0 && minvalue > 0)
             {
-                query = query.Where(c=>c.Price <= maxvalue && c.Price >= minvalue);
+                query = query.Where(c => c.Price <= maxvalue && c.Price >= minvalue);
             }
             var propertyList = await query.Skip((page - 1) * take).Take(take).ToListAsync();
-            
+
             IndexViewModel indexViewModel = new IndexViewModel()
             {
                 ListProperty = propertyList,
                 Improvements = _context.Improvements.ToList(),
                 Page = page,
                 Take = take,
-                Property = propertyById
+                Property = propertyById,
+                PropertyContractType = propertyContractType
             };
             return indexViewModel;
         }
