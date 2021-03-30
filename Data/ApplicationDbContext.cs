@@ -117,10 +117,11 @@ namespace WebApplicationProperty.Data
                 new Improvement() { Id = 81, Name = "Unfurnished", Type = ImprovementType.Basic }
                 );
             modelBuilder.Entity<Project>().HasMany(c => c.Properties).WithOne(e => e.Project);
-            modelBuilder.Entity<Station>().HasMany(c => c.Properties).WithOne(e => e.Station);
             modelBuilder.Entity<TypeProperty>().HasMany(c => c.Properties).WithOne(e => e.TypeProperties);
+            modelBuilder.Entity<City>().HasMany(c => c.Properties).WithOne(e => e.City);
+            modelBuilder.Entity<Province>().HasMany(c => c.Cities).WithOne(e => e.Province);
+            modelBuilder.Entity<Station>().HasMany(c => c.Provinces).WithOne(e => e.Station);
             modelBuilder.Entity<ApplicationUser>().Property(e => e.Id).ValueGeneratedOnAdd();
-            
         }
 
         public DbSet<Project> Projects { get; set; }
@@ -129,7 +130,14 @@ namespace WebApplicationProperty.Data
         public DbSet<Station> Stations { get; set; }
         public DbSet<FileOnFileSystemModel> FilesOnFileSystem { get; set; }
         public DbSet<Improvement> Improvements { get; set; }
+        
         public DbSet<Contact> Contacts { get;set; }
+        
+        public DbSet<WebApplicationProperty.Models.City> City { get; set; }
+        
+        public DbSet<WebApplicationProperty.Models.Province> Province { get; set; }
+        //public DbSet<City> Cities { get; set; }
+        //public DbSet<Region> Regions { get; set; }
 
     }
 }

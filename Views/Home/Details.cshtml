@@ -124,7 +124,7 @@
                     @if (Model.Property.ForSale)
                     {
 
-                        <h4 class="card-title" style="margin-left:450px; margin-top:-45px;">For sale:    @Model.Property.Price  THB</h4>
+                        <h4 class="card-title" >For sale:    @Model.Property.Price  THB</h4>
                     }
                 </div>
             </div>
@@ -200,6 +200,7 @@
                     <b>Location</b>
                 </div>
                 <div class="card-body">
+                   <h4> @Model.Property.Number, @Model.Property.Street, @Model.Property.SubDistrict, @Model.Property.District, @Model.Property.Province, @Model.Property.ZipCode, @Model.Property.Country</h4>
                     <blockquote class="blockquote mb-0">
                         <div id="webkulMap" style="height: 400px; width:800px;"></div>
                     </blockquote>

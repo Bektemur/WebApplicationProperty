@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplicationProperty.Models
 {
@@ -12,7 +13,7 @@ namespace WebApplicationProperty.Models
         public string PlaceName { get; set; }
         public double GeoLong { get; set; }
         public double GeoLat { get; set; }
-        public List<Property> Properties { get; set; }
+        public ICollection<Province> Provinces { get; set; }
     }
     public enum StationType
     {

@@ -52,5 +52,8 @@ namespace WebApplicationProperty.Models
         public string Country { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
+        [ForeignKey("CityId")]
+        public int CityId { get; set; }
+        public City City { get; set; }
     }
 }
