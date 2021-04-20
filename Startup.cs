@@ -87,7 +87,7 @@ namespace WebApplicationProperty
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Search}");
+                    pattern: "{controller=Home}/{action=Search}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

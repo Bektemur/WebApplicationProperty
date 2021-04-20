@@ -29,12 +29,7 @@
 
                         <li class="nav-item">
                             <span>Bedrooms</span><br />
-                            <select id="propertyBedrooms" style="margin-right: 30px;" name="propertyBedrooms">
-                                <option value="0">Any</option>
-                                <option value="1">1+ Beds </option>
-                                <option value="2">2+ Beds</option>
-                                <option value="3">3+ Beds </option>
-                                <option value="4">4+ Beds</option>
+                            <select id="propertyBedrooms" style="margin-right: 30px;" name="propertyBedrooms" asp-for="@Model.Bedrooms" asp-items="Html.GetEnumSelectList<BedRooms>()">
                             </select>
                         </li>
                         <li class="nav-item">
@@ -69,23 +64,9 @@
                         </li>
                         <li class="nav-item">
                             <span>Property types</span><br />
-                            <select id="propertyTypes" style="margin-right: 30px;" onchange="orderByChanged()" name="propertyTypes">
-                                <option value="">Any</option>
-                                <option value="Townhouse">Townhouse </option>
-                                <option value="House">House</option>
-                                <option value="Condominium">Condominium</option>
-                                <option value="Apartment">Apartment</option>
-                                <option value="Shop house">Shop house</option>
-                                <option value="Office">Office</option>
-                                <option value="Land">Land</option>
-                                <option value="Penthouse">Penthouse</option>
-                                <option value="Retail">Retail</option>
-                                <option value="Business">Business</option>
-                                <option value="Factory">Factory</option>
-                                <option value="Commercial Building">Commercial Building</option>
-                                <option value="Hotel / Resort">Hotel / Resort</option>
-                                <option value="Other commercial">Other commercial</option>
-                            </select>
+                                                       <select id="propertyType" style="margin-right: 30px;"  name="propertyType"
+                                                           asp-for="@Model.PropertyType" asp-items="Html.GetEnumSelectList<PropertyType>()">
+                                                       </select>
                         </li>
                     </ul>
                     <div class="form-inline my-2 my-lg-0">
@@ -166,7 +147,13 @@
         var propertyContractType = document.getElementById("propertyContractType").value;
         $('#propertyContractType').change(function () {
                 $("#submitFormBtn").click();
-            });
+        });
+        $('#propertyType').change(function () {
+            $("#submitFormBtn").click();
+        });
+        $('#propertyBedrooms').change(function () {
+            $("#submitFormBtn").click();
+        });
         @*
         var min = 0;
         var max = 150000;
