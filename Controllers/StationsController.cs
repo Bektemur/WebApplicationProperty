@@ -54,10 +54,12 @@ namespace WebApplicationProperty.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StationId,Name")] Station station)
+        public async Task<IActionResult> Create(Station station, string latitude, string longitude)
         {
             if (ModelState.IsValid)
             {
+                station.GeoLat = latitude;
+                station.GeoLong = longitude;
                 _context.Add(station);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,7 +88,7 @@ namespace WebApplicationProperty.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StationId,Name")] Station station)
+        public async Task<IActionResult> Edit(int id, [Bind("StationId,Name,StationType,PlaceName,GeoLong,GeoLat")] Station station)
         {
             if (id != station.StationId)
             {

@@ -15,6 +15,18 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StationType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlaceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GeoLong)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GeoLat)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -25,9 +37,20 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.StationType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlaceName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GeoLong)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GeoLat)
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.StationId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.StationId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.StationId">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.StationId">Details</a>
             </td>
         </tr>
 }

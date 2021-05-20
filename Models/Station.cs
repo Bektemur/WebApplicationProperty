@@ -11,13 +11,13 @@ namespace WebApplicationProperty.Models
         public string Name { get; set; }
         public StationType StationType { get; set; }
         public string PlaceName { get; set; }
-        public double GeoLong { get; set; }
-        public double GeoLat { get; set; }
+        public string GeoLong { get; set; }
+        public string GeoLat { get; set; }
         public ICollection<Province> Provinces { get; set; }
     }
     public enum StationType
     {
-        BTS = 0,
-        MRT = 1,
+        BTS,
+        MRT,
     }
 }

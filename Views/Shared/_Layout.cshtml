@@ -1,7 +1,7 @@
 ﻿@{ 
     var projectName = "BangkokPS";
 }
-
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,11 +25,13 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@localizer["Home"]</a>
                         </li>
                         @if ((User.Identity.IsAuthenticated))
                         {
-
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-action="Index" asp-controller="Cities">City</a> 
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Properties" asp-action="Index">Property</a>
                             </li>
@@ -39,14 +41,16 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="File" asp-action="Index">Images</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Stations" asp-action="Index">Stations</a>
+                            </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Search">Properties</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Search">@localizer["Properties"]</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About us</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">@localizer["About us"]</a>
                         </li>
-                        
                     </ul>
                 </div>
             </div>
