@@ -17,6 +17,9 @@ namespace WebApplicationProperty.ViewModel
         public PropertyContractType PropertyContractType { get; set; }
         public PropertyType PropertyType { get; set; }
         public BedRooms Bedrooms { get; set; }
+        public PriceForSale PriceForSale { get; set; }
+        public PriceForRent PriceForRent { get; set; }
+        public Station Station { get; set; }
     }
 
     [Serializable]
@@ -24,14 +27,15 @@ namespace WebApplicationProperty.ViewModel
     {
         public int[] SelectedBasic { get; set; }
         public PropertyContractType PropertyContractType { get; set; }
-        public PropertyType PropertyType {get; set;}
-        public BedRooms propertyBedrooms { get; set; }
-        public double minvalue { get; set; }
-        public double maxvalue { get; set; }
-        public string search { get; set; }
-        public int page { get; set; } = 1;
-        public int take { get; set; } = 25;
-        public int id { get; set; } = 0;
+        public PropertyType PropertyType { get; set; }
+        public BedRooms PropertyBedrooms { get; set; }
+        public PriceForSale PriceForSale { get; set; }
+        public PriceForRent PriceForRent { get; set; }
+        public Station Station { get; set; }
+        public string Search { get; set; }
+        public int Page { get; set; } = 1;
+        public int Take { get; set; } = 25;
+        public int Id { get; set; } = 0;
     }
 
     public enum PropertyContractType
@@ -47,6 +51,8 @@ namespace WebApplicationProperty.ViewModel
     }
     public enum PropertyType
     {
+        [Display(Name = "Any")]
+        Any,
         [Display(Name = "Unspecified")]
         Unspecified,
         [Display(Name = "Townhouse")]
@@ -91,5 +97,49 @@ namespace WebApplicationProperty.ViewModel
         Beds3,
         [Display(Name = "4+ Beds")]
         Beds4
+    }
+    public enum PriceForSale
+    {
+        [Display(Name = "Any")]
+        Any,
+        [Display(Name = " < ฿2M ")]
+        ForSaleRange1,
+        [Display(Name = "฿2M-฿3M ")]
+        ForSaleRange2,
+        [Display(Name = "฿3M-฿5M ")]
+        ForSaleRange3,
+        [Display(Name = "฿5M-฿10M ")]
+        ForSaleRange4,
+        [Display(Name = "฿10M-฿14M ")]
+        ForSaleRange5,
+        [Display(Name = "฿15M-฿25M ")]
+        ForSaleRange6,
+        [Display(Name = "฿25M-฿50M ")]
+        ForSaleRange7,
+        [Display(Name = "฿50M-฿100M ")]
+        ForSaleRange8,
+        [Display(Name = ">฿100M")]
+        ForSaleRange9,
+    }
+    public enum PriceForRent
+    {
+        [Display(Name = "Any")]
+        Any,
+        [Display(Name = "< ฿9,999")]
+        ForRentRange1,
+        [Display(Name = "฿10,000-฿24,999")]
+        ForRentRange2,
+        [Display(Name = "฿25,000-฿34,999")]
+        ForRentRange3,
+        [Display(Name = "฿35,000-฿49,999")]
+        ForRentRange4,
+        [Display(Name = "฿50,000-฿79,999")]
+        ForRentRange5,
+        [Display(Name = "฿75,000-฿99,999")]
+        ForRentRange6,
+        [Display(Name = "฿100,000-฿149,999")]
+        ForRentRange7,
+        [Display(Name = ">฿150,000")]
+        ForRentRange8
     }
 }

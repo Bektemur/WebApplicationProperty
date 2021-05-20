@@ -1,5 +1,6 @@
 ﻿@using WebApplicationProperty.Models
 @using WebApplicationProperty.ViewModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
 @{
     ViewData["Title"] = "Home Page";
     string getRelativeDateTime(DateTime date)
@@ -42,7 +43,6 @@
             height: 30%;
         }
 </style>
-
 <div class="box">
     <img src="~/images/bangkok-home-banners.jpg" style="width:100%;" />
     <div class="text">
@@ -50,11 +50,10 @@
 
         <h1><b>Solutions Co,.Ltd</b></h1>
 
-        <h4>We Serve the Best</h4>
+        <h4>@localizer["LearnMore"]</h4>
     </div>
 </div>
-
-<p class="d-flex justify-content-center"></p><h2 style="margin-top:50px; margin-left:100px">Properties</h2>
+<p class="d-flex justify-content-center"></p><h2 style="margin-top:50px; margin-left:100px">@localizer["Properties"]</h2>
 
             <table class="d-flex justify-content-center" style="margin-top:50px">
                 <tr>

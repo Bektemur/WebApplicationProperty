@@ -61,7 +61,7 @@ namespace WebApplicationProperty.Controllers
         {
             ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Name");
             ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "Name");
-            ViewData["CityId"] =    new SelectList(_context.City, "CityId", "Name"); 
+            ViewData["CityId"] =    new SelectList(_context.City, "Id", "Name"); 
             ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "Name");
             ViewData["Improvements"] = _context.Improvements.ToList();
             return View();
@@ -99,7 +99,7 @@ namespace WebApplicationProperty.Controllers
             }
             ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", properties.ProjectId);
             ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "StationId", properties.StationId);
-            ViewData["CityId"] = new SelectList(_context.City, "CityId", "Name");
+            ViewData["CityId"] = new SelectList(_context.City, "Id", "Name");
             ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "TypePropertyId", properties.TypePropertyId);
             ViewData["Improvements"] = _context.Improvements.ToList();
             return View(properties);
@@ -126,7 +126,7 @@ namespace WebApplicationProperty.Controllers
             ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "UserName");
             ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Name");
             ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "Name");
-            ViewData["CityId"] = new SelectList(_context.City, "CityId", "Name");
+            ViewData["CityId"] = new SelectList(_context.City, "Id", "Name");
             ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "Name");
             ImprovmentsData(properties);
             return View(properties);
@@ -150,7 +150,7 @@ namespace WebApplicationProperty.Controllers
             ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "UserName");
             ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId");
             ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "StationId");
-            ViewData["CityId"] = new SelectList(_context.City, "CityId", "CityId");
+            ViewData["CityId"] = new SelectList(_context.City, "Id", "Id");
             ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "TypePropertyId");
             
                 if (await TryUpdateModelAsync<Property>(

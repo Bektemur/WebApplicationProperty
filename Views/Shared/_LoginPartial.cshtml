@@ -1,10 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
-    {
+    {   <li>
+            <partial name='_CulturePartial' />
+        </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
         </li>
@@ -16,19 +18,15 @@
     }
     else
     {
+         <li>
+            <partial name='_CulturePartial' />
+        </li>
         <li>
-            <span>CALL  CENTER </span><br />
+            <span>@localizer["Call Center"]</span><br />
             <span>+66894581616</span>
         </li>
 
-        <li>
-            <select id="language" style="margin-top:10px; margin-left:10px">
-                <option>EN</option>
-                <option>TH</option>
-                <option>ZH</option>
-                <option>RU</option>
-            </select>
-        </li>
+       
         <li class="nav-item">
 
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>

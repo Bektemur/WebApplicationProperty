@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,25 +17,27 @@ namespace WebApplicationProperty.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
-
+        const double constForSale = 1000000;
+        const double constForRent = 1000;
         public HomeController(ApplicationDbContext context)
         {
             _context = context;
 
         }
-        public async Task<IActionResult> Search(int[] selectedBasic, int page = 1, int take = 25, int id = 0)
+        public async Task<IActionResult> Search(int page = 1, int take = 25, int id = 0)
         {
-            IndexViewModel indexViewModel = await GetIndexViewModel(selectedBasic, 0, 0, 0, 0, 0, "", page, take, id);
+            ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "Name");
+            IndexViewModel indexViewModel = await GetIndexViewModel(page, take, id);
             return View(indexViewModel);
         }
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> SearchResult(IndexViewModelRequest model)
         {
             IndexViewModel indexViewModel = await GetIndexViewModel(model.SelectedBasic, model.PropertyContractType, model.PropertyType,
-                model.propertyBedrooms, model.minvalue, model.maxvalue, model.search, model.page, model.take, model.id);
+                model.PropertyBedrooms, model.PriceForRent, model.PriceForSale, model.Search, model.Page, model.Take, model.Id);
             return PartialView("_PropertySearchPartial", indexViewModel);
         }
-
+       
         public IActionResult Index(int page = 1, int take = 25, int id = 0)
         {
             IndexViewModel indexViewModel = new IndexViewModel()
@@ -101,9 +104,30 @@ namespace WebApplicationProperty.Controllers
         {
             return View();
         }
+        public async Task<IndexViewModel> GetIndexViewModel(int page = 1, int take = 25, int id = 0)
+        {
+            var propertyById = id <= 0 ? null : _context.Properties
+               .Include(p => p.Project)
+               .Include(p => p.Station)
+               .Include(p => p.TypeProperties)
+               .Include(p => p.Improvements).Include(p => p.FileSystemModels)
+               .FirstOrDefault(m => m.PropertyId == id);
+            var query = _context.Properties.Include(x => x.FileSystemModels).Include(x => x.Improvements).AsQueryable();
+            var propertyList = await query.Skip((page - 1) * take).Take(take).ToListAsync();
 
+            IndexViewModel indexViewModel = new IndexViewModel()
+            {
+                ListProperty = propertyList,
+                Improvements = _context.Improvements.ToList(),
+                Page = page,
+                Take = take,
+                Property = propertyById,
+               
+            };
+            return indexViewModel;
+        }
 
-        public async Task<IndexViewModel> GetIndexViewModel(int[] selectedImprovments, PropertyContractType propertyContractType,  PropertyType propertyType, BedRooms BedRooms,  double minvalue, double maxvalue, string search, int page = 1, int take = 25, int id = 0)
+        public async Task<IndexViewModel> GetIndexViewModel(int[] selectedImprovments, PropertyContractType propertyContractType,  PropertyType propertyType, BedRooms BedRooms,  PriceForRent priceForRent, PriceForSale priceForSale, string search, int page = 1, int take = 25, int id = 0)
         {
             var propertyById = id <= 0 ? null : _context.Properties
                .Include(p => p.Project)
@@ -129,70 +153,8 @@ namespace WebApplicationProperty.Controllers
             {
                 query = query.Where(c => c.ForSale);
             }
-            if (propertyType == PropertyType.Appartment)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.Appartment.ToString());
-            }
-            if (propertyType == PropertyType.Business)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.Business.ToString());
-            }
-            if (propertyType == PropertyType.CommercialBuilding)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.CommercialBuilding.ToString());
-            }
-            if (propertyType == PropertyType.Factory)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.Factory.ToString());
-            }
-            if (propertyType == PropertyType.Condominium)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.Condominium.ToString());
-            }
-            if (propertyType == PropertyType.HotelResort)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.HotelResort.ToString());
-            }
-            if (propertyType == PropertyType.House)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.House.ToString());
-            }
-            if (propertyType == PropertyType.Land)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.Land.ToString());
-            }
-            if (propertyType == PropertyType.OtherCommertcial)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.OtherCommertcial.ToString());
-            }
-            if (propertyType == PropertyType.Penthouse)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.Penthouse.ToString());
-            }
-            if (propertyType == PropertyType.HotelResort)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.HotelResort.ToString());
-            }
-            if (propertyType == PropertyType.Retail)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.Retail.ToString());
-            }
-            if (propertyType == PropertyType.ShopHouse)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.ShopHouse.ToString());
-            }
-            if (propertyType == PropertyType.ServicedApartment)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.ServicedApartment.ToString());
-            }
-            if (propertyType == PropertyType.Office)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.Office.ToString());
-            }
-            if (propertyType == PropertyType.Unspecified)
-            {
-                query = query.Where(c => c.TypeProperties.Name == PropertyType.Unspecified.ToString());
-            }
+            if(!GetPropertyType(propertyType).Contains("Any"))
+            query = query.Where(c=>c.TypeProperties.Name == GetPropertyType(propertyType));
             if (BedRooms == BedRooms.Beds1)
             {
                 query = query.Where(c => c.Bedrooms == 1);
@@ -205,13 +167,19 @@ namespace WebApplicationProperty.Controllers
             {
                 query = query.Where(c => c.Bedrooms == 3);
             }
-            if (maxvalue > 0 && minvalue > 0 && propertyContractType == PropertyContractType.ForRent)
+            if (BedRooms == BedRooms.Beds4)
             {
-                query = query.Where(c => c.Price_rent <= maxvalue && c.Price_rent >= minvalue);
+                query = query.Where(c => c.Bedrooms == 4);
             }
-            if (maxvalue > 0 && minvalue > 0)
+            PriceRangeForSale(priceForSale, out double minvalueForSale, out double maxvalueForSale);
+            if (propertyContractType == PropertyContractType.ForSale)
             {
-                query = query.Where(c => c.Price <= maxvalue && c.Price >= minvalue);
+                query = query.Where(c => c.Price_rent <= maxvalueForSale && c.Price_rent >= minvalueForSale);
+            }
+            PriceRangeForRent(priceForRent, out double minvalueForRent, out double maxvalueForRent);
+            if (propertyContractType == PropertyContractType.ForRent)
+            {
+                query = query.Where(c => c.Price_rent <= maxvalueForRent && c.Price_rent >= minvalueForRent);
             }
             var propertyList = await query.Skip((page - 1) * take).Take(take).ToListAsync();
 
@@ -222,9 +190,123 @@ namespace WebApplicationProperty.Controllers
                 Page = page,
                 Take = take,
                 Property = propertyById,
+                PriceForRent = priceForRent,
+                PriceForSale = priceForSale,
                 PropertyContractType = propertyContractType
             };
             return indexViewModel;
+        }
+        public void PriceRangeForSale(PriceForSale priceForSale, out double minimumPriceForSale, out double maximumPriceForSale)
+        {
+            switch (priceForSale)
+            {
+                case PriceForSale.ForSaleRange1:
+                    minimumPriceForSale = 0;
+                    maximumPriceForSale = 2 * constForSale;
+                    break;
+                case PriceForSale.ForSaleRange2:
+                    minimumPriceForSale = 2 * constForSale;
+                    maximumPriceForSale = 3 * constForSale;
+                    break;
+                case PriceForSale.ForSaleRange3:
+                    minimumPriceForSale = 3 * constForSale;
+                    maximumPriceForSale = 5 * constForSale;
+                    break;
+                case PriceForSale.ForSaleRange4:
+                    minimumPriceForSale = 5 * constForSale;
+                    maximumPriceForSale = 10 * constForSale;
+                    break;
+                case PriceForSale.ForSaleRange5:
+                    minimumPriceForSale = 10 * constForSale;
+                    maximumPriceForSale = 14 * constForSale;
+                    break;
+                case PriceForSale.ForSaleRange6:
+                    minimumPriceForSale = 14 * constForSale;
+                    maximumPriceForSale = 25 * constForSale;
+                    break;
+                case PriceForSale.ForSaleRange7:
+                    minimumPriceForSale = 25 * constForSale;
+                    maximumPriceForSale = 50 * constForSale;
+                    break;
+                case PriceForSale.ForSaleRange8:
+                    minimumPriceForSale = 50 * constForSale;
+                    maximumPriceForSale = 100 * constForSale;
+                    break;
+                case PriceForSale.ForSaleRange9:
+                    minimumPriceForSale = 100 * constForSale;
+                    maximumPriceForSale = 1000 * constForSale;
+                    break;
+                default:
+                    minimumPriceForSale = 0;
+                    maximumPriceForSale = 100 * constForSale;
+                    break;
+            }
+        }
+        public void PriceRangeForRent(PriceForRent priceForRent, out double minimumPriceForRent, out double maximumPriceForRent)
+        {
+            switch (priceForRent)
+            {
+                case PriceForRent.ForRentRange1:
+                    minimumPriceForRent = 0;
+                    maximumPriceForRent = 9.999 * constForRent;
+                    break;
+                case PriceForRent.ForRentRange2:
+                    minimumPriceForRent = 10 * constForRent;
+                    maximumPriceForRent = 24.999 * constForRent;
+                    break;
+                case PriceForRent.ForRentRange3:
+                    minimumPriceForRent = 25 * constForRent;
+                    maximumPriceForRent = 34.999 * constForRent;
+                    break;
+                case PriceForRent.ForRentRange4:
+                    minimumPriceForRent = 35 * constForRent;
+                    maximumPriceForRent = 49.999 * constForRent;
+                    break;
+                case PriceForRent.ForRentRange5:
+                    minimumPriceForRent = 50 * constForRent;
+                    maximumPriceForRent = 74.999 * constForRent;
+                    break;
+                case PriceForRent.ForRentRange6:
+                    minimumPriceForRent = 75 * constForRent;
+                    maximumPriceForRent = 99.999 * constForRent;
+                    break;
+                case PriceForRent.ForRentRange7:
+                    minimumPriceForRent = 100 * constForRent;
+                    maximumPriceForRent = 149.999 * constForRent;
+                    break;
+                case PriceForRent.ForRentRange8:
+                    minimumPriceForRent = 150 * constForRent;
+                    maximumPriceForRent = 999.999 * constForRent;
+                    break;
+                default:
+                    minimumPriceForRent = 0;
+                    maximumPriceForRent = 999.999 * constForRent;
+                    break;
+            }
+        }
+        private string GetPropertyType(PropertyType propertyType)
+        {
+            return propertyType switch
+            {
+                PropertyType.Any => "Any",
+                PropertyType.Unspecified => "Unspecified",
+                PropertyType.Townhouse => "Townhouse",
+                PropertyType.House => "House",
+                PropertyType.Condominium => "Condominium",
+                PropertyType.Appartment => "Appartment",
+                PropertyType.Office => "Office",
+                PropertyType.Land => "Land",
+                PropertyType.Penthouse => "Penthouse",
+                PropertyType.ServicedApartment => "ServicedApartment",
+                PropertyType.ShopHouse => "ShopHouse",
+                PropertyType.Retail => "Retail",
+                PropertyType.Business => "Business",
+                PropertyType.Factory => "Factory",
+                PropertyType.CommercialBuilding => "CommercialBuilding",
+                PropertyType.HotelResort => "HotelResort",
+                PropertyType.OtherCommertcial => "OtherCommertcial",
+                _ => "Any",
+            };
         }
     }
 }
