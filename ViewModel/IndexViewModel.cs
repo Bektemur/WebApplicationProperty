@@ -133,7 +133,7 @@ namespace WebApplicationProperty.ViewModel
         ForRentRange3,
         [Display(Name = "฿35,000-฿49,999")]
         ForRentRange4,
-        [Display(Name = "฿50,000-฿79,999")]
+        [Display(Name = "฿50,000-฿74,999")]
         ForRentRange5,
         [Display(Name = "฿75,000-฿99,999")]
         ForRentRange6,
