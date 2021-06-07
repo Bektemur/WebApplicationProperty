@@ -2,11 +2,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace WebApplicationProperty.Models
+namespace WebApplicationProperty.Data
 {
     public class ApplicationUser : IdentityUser<string>
     {
-
         public ApplicationUser() { }
         public ApplicationUser(string name) : base(name) { }
         public DateTime DateTimeRegistration { get; set; }

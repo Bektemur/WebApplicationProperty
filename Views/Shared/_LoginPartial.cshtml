@@ -4,7 +4,8 @@
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
-    {   <li>
+    {
+        <li>
             <partial name='_CulturePartial' />
         </li>
         <li class="nav-item">
@@ -18,21 +19,20 @@
     }
     else
     {
-         <li>
+        <li>
             <partial name='_CulturePartial' />
         </li>
         <li>
             <span>@localizer["Call Center"]</span><br />
-            <span>+66894581616</span>
+            <span><a href="tel:+66894581616" target="_blank">+66894581616</a></span>
         </li>
 
-       
-        <li class="nav-item">
 
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">@localizer["Register"]</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">@localizer["Login"]</a>
         </li>
     }
 </ul>

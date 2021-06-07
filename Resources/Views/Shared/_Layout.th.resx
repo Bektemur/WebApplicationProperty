@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Call Center" xml:space="preserve">
-    <value>Call Center</value>
+  <data name="About us" xml:space="preserve">
+    <value>About us</value>
   </data>
-  <data name="Login" xml:space="preserve">
-    <value>Login</value>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
   </data>
-  <data name="Register" xml:space="preserve">
-    <value>Register</value>
+  <data name="Properties" xml:space="preserve">
+    <value>นายหน้าขายบ้าน</value>
   </data>
 </root>
