@@ -7,6 +7,9 @@ using WebApplicationProperty.Models;
 using Microsoft.AspNetCore.Authorization;
 using WebApplicationProperty.Data;
 using System;
+using System.IO;
+using CsvHelper;
+using System.Text;
 
 namespace WebApplicationProperty.Controllers
 {
@@ -146,6 +149,35 @@ namespace WebApplicationProperty.Controllers
             }
 
             return NotFound();
+        }
+
+        [HttpPost]
+        public FileResult Export()
+        {
+            //var s =  _userManager.Users
+      
+                StringBuilder sb = new StringBuilder();
+                List<object> users = (from user in _userManager.Users.ToList()
+                                      select new[] {  user.FirstName.ToString(),
+                                                             user.LastName,
+                                                             user.Email,
+                                                             user.PhoneNumber,
+                                                             user.UserName,
+                                                             user.CreatedDate.ToString()
+                                }).ToList<object>();
+                    users.Insert(0, new string[6] { "FirstName", "LastName", "Email", "PhoneNumber", "UserName", "Created Date" });
+                    for (int i = 0; i < users.Count(); i++)
+                    {
+                        string[] user = (string[])users[i];
+                        for (int j = 0; j < user.Length; j++)
+                        {
+                                sb.Append(user[j] + ',');
+                        }
+                        sb.Append("\r\n");
+                    }
+                   
+               
+                return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "AllUsers.csv");
         }
     }
 }
