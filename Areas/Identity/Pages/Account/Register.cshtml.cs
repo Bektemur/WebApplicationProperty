@@ -64,7 +64,6 @@ namespace WebApplicationProperty.Areas.Identity.Pages.Account
             [Required]
             [Display(Name = "Phone")]
             public string Phone { get; set; }
-            public DateTime DateTime { get; set; }
             [Required]
             public string FirstName { get; set; }
             [Required]
@@ -83,7 +82,15 @@ namespace WebApplicationProperty.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, PhoneNumber = Input.Phone, DateTimeRegistration = DateTime.Now, FirstName = Input.FirstName, LastName = Input.LastName};
+                var user = new ApplicationUser
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    PhoneNumber = Input.Phone,
+                    CreatedDate = DateTime.UtcNow,
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

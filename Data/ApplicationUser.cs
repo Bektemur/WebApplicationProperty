@@ -8,7 +8,7 @@ namespace WebApplicationProperty.Data
     {
         public ApplicationUser() { }
         public ApplicationUser(string name) : base(name) { }
-        public DateTime DateTimeRegistration { get; set; }
+        public DateTime CreatedDate { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
     }
@@ -17,5 +17,8 @@ namespace WebApplicationProperty.Data
     {
         public ApplicationRole() { }
         public ApplicationRole(string name) : base(name) { }
+
+        public DateTime CreatedDate { get; set; }
+        public string Description { get; set; }
     }
 }
