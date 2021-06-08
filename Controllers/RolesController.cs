@@ -10,7 +10,7 @@ using System;
 
 namespace WebApplicationProperty.Controllers
 {
-    //[Authorize(Roles = Roles.Admin + "," + Roles.Manager)]
+    [Authorize(Roles = Roles.Admin + "," + Roles.Manager)]
     public class RolesController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
