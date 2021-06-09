@@ -1,0 +1,56 @@
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container">
+            <img src="~/images/website_logo_solid_background.png" height="90" width="150" />
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <partial name="_LoginPartial" />
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@localizer["Home"]</a>
+                    </li>
+                    @if ((User.Identity.IsAuthenticated))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Properties" asp-action="Index">
+                            @((User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Manager))? "Property" : "My Properties")
+                            </a>
+                        </li>
+                        if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Manager))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-action="Index" asp-controller="Cities"></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Improvements" asp-action="Index">Facilities</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="File" asp-action="Index">Images</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Stations" asp-action="Index">Transport</a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-dark" asp-controller="Roles" asp-action="Index">Roles</a>
+                            </li>
+                        }
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Search">@localizer["Search"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">@localizer["About us"]</a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

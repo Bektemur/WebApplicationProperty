@@ -34,6 +34,8 @@ namespace WebApplicationProperty.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            public string RcToken { get; set; }
         }
 
         public void OnGet()
@@ -44,6 +46,12 @@ namespace WebApplicationProperty.Areas.Identity.Pages.Account
         {
             if (!ModelState.IsValid)
             {
+                return Page();
+            }
+
+            if (string.IsNullOrWhiteSpace(Input.RcToken) || Input.RcToken.Length < 10)
+            {
+                ModelState.AddModelError("Email", "Wrong value.");
                 return Page();
             }
 
@@ -65,7 +73,7 @@ namespace WebApplicationProperty.Areas.Identity.Pages.Account
             await _emailSender.SendEmailAsync(
                 Input.Email,
                 "Confirm your email",
-                $"Dear {user.UserName}.<br/> Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.<br/>BangkokPS Team");
+                $"Dear {user.UserName}.<br/> Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
             ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
             return Page();

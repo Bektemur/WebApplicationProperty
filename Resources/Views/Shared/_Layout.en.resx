@@ -123,7 +123,7 @@
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
-  <data name="Properties" xml:space="preserve">
-    <value>Properties</value>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
   </data>
 </root>

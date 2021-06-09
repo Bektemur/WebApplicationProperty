@@ -22,7 +22,7 @@ namespace WebApplicationProperty.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, 
+        public LoginModel(SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<ApplicationUser> userManager)
         {
@@ -83,17 +83,23 @@ namespace WebApplicationProperty.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    _logger.LogInformation("User logged in " + Input.Email + " .");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
+                    _logger.LogInformation("User RequiresTwoFactor " + Input.Email + " .");
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
+                }
+                else if (!(await _userManager.FindByEmailAsync(Input.Email)).EmailConfirmed)
+                {
+                    _logger.LogWarning("User email is not confirmed for " + Input.Email + " .");
+                    return RedirectToPage("./ResendEmailConfirmation");
                 }
                 else
                 {
