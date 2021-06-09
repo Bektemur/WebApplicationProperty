@@ -123,4 +123,7 @@
   <data name="ru" xml:space="preserve">
     <value>Russian</value>
   </data>
+  <data name="th" xml:space="preserve">
+    <value>Thai (ไทย)</value>
+  </data>
 </root>
