@@ -1,33 +1,16 @@
-﻿@using WebApplicationProperty.ViewModel
+﻿@using WebApplicationProperty.Helpers
+@using WebApplicationProperty.ViewModel
 @model IndexViewModel
 @{
     ViewData["Title"] = "Details";
 }
 @{
 
-    List<string> improvments = new List<string>() {"None", "Basic", "Facilities", "Interior",
+    List<string> improvments = new List<string>() {
+        "None", "Basic", "Facilities", "Interior",
     "Fixtures", "CommonArea", "Extra", "Other"};
 
     var improvmentsGroup = Model.Property.Improvements.GroupBy(v => v.Type);
-
-    string getRelativeDateTime(DateTime date)
-    {
-        TimeSpan ts = DateTime.Now - date;
-        if (ts.TotalMinutes < 1)//seconds ago
-            return "just now";
-        if (ts.TotalHours < 1)//min ago
-            return (int)ts.TotalMinutes == 1 ? "1 Minute ago" : (int)ts.TotalMinutes + " Minutes ago";
-        if (ts.TotalDays < 1)//hours ago
-            return (int)ts.TotalHours == 1 ? "1 Hour ago" : (int)ts.TotalHours + " Hours ago";
-        if (ts.TotalDays < 7)//days ago
-            return (int)ts.TotalDays == 1 ? "1 Day ago" : (int)ts.TotalDays + " Days ago";
-        if (ts.TotalDays < 30.4368)//weeks ago
-            return (int)(ts.TotalDays / 7) == 1 ? "1 Week ago" : (int)(ts.TotalDays / 7) + " Weeks ago";
-        if (ts.TotalDays < 365.242)//months ago
-            return (int)(ts.TotalDays / 30.4368) == 1 ? "1 Month ago" : (int)(ts.TotalDays / 30.4368) + " Months ago";
-        //years ago
-        return (int)(ts.TotalDays / 365.242) == 1 ? "1 Year ago" : (int)(ts.TotalDays / 365.242) + " Years ago";
-    }
 
 }
 <style>
@@ -66,15 +49,12 @@
 </style>
 @section Scripts
 {
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyD7nYxVPynhALgxmvBMe5iggBIL7RUvASk&callback=initialize&libraries=places&v=weekly">
-    </script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
-    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyD7nYxVPynhALgxmvBMe5iggBIL7RUvASk&callback=initialize&libraries=places&v=weekly"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             Simditor.locale = 'en-US';
             var editor = new Simditor({
-            textarea: $('#editor')
+                textarea: $('#editor')
                 //optional options
             });
         });
@@ -82,29 +62,29 @@
         var marker;
         var lat = document.getElementById("lat").value;
         var lon = document.getElementById("lon").value;
-        
+
         var myLatlng = new google.maps.LatLng(lat, lon);
         var geocoder = new google.maps.Geocoder();
         var infowindow = new google.maps.InfoWindow();
         function initialize() {
             var mapOptions = {
-            zoom: 18,
+                zoom: 18,
                 center: myLatlng,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
 
             map = new google.maps.Map(document.getElementById("webkulMap"), mapOptions);
             marker = new google.maps.Marker({
-            map: map,
+                map: map,
                 position: myLatlng,
                 draggable: false
             });
 
-           
+
         }
         google.maps.event.addDomListener(window, 'load', initialize);
-        
-</script>
+
+    </script>
 }
 <a class="btn btn-warning" asp-controller="Home" style="margin-bottom: 10px;" asp-action="Index">Back to property listings</a>
 
@@ -124,7 +104,7 @@
                     @if (Model.Property.ForSale)
                     {
 
-                        <h4 class="card-title" >For sale:    @Model.Property.Price  THB</h4>
+                        <h4 class="card-title">For sale:    @Model.Property.Price  THB</h4>
                     }
                 </div>
             </div>
@@ -159,14 +139,16 @@
                     </div>
                 </div>
 
-
                 <div class="card-body">
                     <h5 class="card-title">About the unit</h5>
 
-
-                    <p class="card-text" style="background-color:silver"><b>Property Id:</b> @Model.Property.PropertyId &nbsp; <b>Posted:</b> @getRelativeDateTime(Model.Property.Public_date)    &nbsp; <b>Last update:</b> @getRelativeDateTime(Model.Property.Update_date)</p>
+                    <p class="card-text" style="background-color:silver">
+                        <b>Property Id:</b> @Model.Property.PropertyId &nbsp;
+                        <b>Posted:</b> @TimeHelper.GetRelativeDateTime(Model.Property.Public_date) &nbsp;
+                        <b>Last update:</b> @TimeHelper.GetRelativeDateTime(Model.Property.Update_date)
+                    </p>
                     <p class="card-text">@Html.Raw(Model.Property.Description)</p>
-                    <input style="visibility:hidden"  id="lat" value="@Model.Property.Latitude" />
+                    <input style="visibility:hidden" id="lat" value="@Model.Property.Latitude" />
                     <input style="visibility:hidden" id="lon" value="@Model.Property.Longitude" />
                 </div>
             </div>
@@ -200,7 +182,7 @@
                     <b>Location</b>
                 </div>
                 <div class="card-body">
-                   <h4> @Model.Property.Number, @Model.Property.Street, @Model.Property.SubDistrict, @Model.Property.District, @Model.Property.Province, @Model.Property.ZipCode, @Model.Property.Country</h4>
+                    <h4> @Model.Property.Number, @Model.Property.Street, @Model.Property.SubDistrict, @Model.Property.District, @Model.Property.Province, @Model.Property.ZipCode, @Model.Property.Country</h4>
                     <blockquote class="blockquote mb-0">
                         <div id="webkulMap" style="height: 400px; width:800px;"></div>
                     </blockquote>
@@ -220,14 +202,14 @@
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
                         <form asp-action="Details">
-                            <input name="Name" placeholder="Name (Required)" /><br />
-                            <input name="Email" placeholder="Emails (Required)" /><br />
-                            <input name="Phone" placeholder="Phone (Optional)" /><br />
-                            <textarea name="Description" placeholder="Message (Optional)"></textarea><br />
-                            <input value="Send" type="submit" class="btn btn-success" /><br />
-                            or<br />
+                            <input name="Name" placeholder="Name (Required)" class="form-control" />
+                            <input name="Email" placeholder="Emails (Required)" class="form-control" />
+                            <input name="Phone" placeholder="Phone (Optional)" class="form-control" />
+                            <textarea name="Description" placeholder="Message (Optional)" class="form-control"></textarea>
+                            <input value="Send" type="submit" class="btn btn-success w-100" /><br />
                         </form>
-                        <input value="Call +66 89 458 1616" type="submit" class="btn btn-success" /><br />
+                        <p class="text-center mb-0">or</p>
+                        <a href="tel:+66894581616" class="btn btn-success w-100">Call +66 89 458 1616</a>
                     </blockquote>
                 </div>
             </div>

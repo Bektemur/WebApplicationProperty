@@ -38,20 +38,11 @@ namespace WebApplicationProperty.Controllers
             return PartialView("_PropertySearchPartial", indexViewModel);
         }
        
-        public IActionResult Index(int page = 1, int take = 25, int id = 0)
+        public IActionResult Index()
         {
             IndexViewModel indexViewModel = new IndexViewModel()
             {
-                ListProperty = _context.Properties.Include(x => x.FileSystemModels).Skip(page - 1).Take(take).ToList(),
-                Improvements = _context.Improvements.ToList(),
-                Page = page,
-                Take = take,
-                Property = _context.Properties
-                .Include(p => p.Project)
-                .Include(p => p.Station)
-                .Include(p => p.TypeProperties)
-                .Include(p => p.Improvements).ThenInclude(x => x.Improvement).Include(p => p.FileSystemModels)
-                .FirstOrDefault(m => m.PropertyId == id)
+                ListProperty = _context.Properties.Include(x => x.FileSystemModels).Skip(0).Take(3).ToList()
             };
             return View(indexViewModel);
         }

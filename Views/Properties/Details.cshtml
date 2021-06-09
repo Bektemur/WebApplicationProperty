@@ -1,29 +1,9 @@
-﻿@model WebApplicationProperty.Models.Property
+﻿@using WebApplicationProperty.Helpers;
+@model WebApplicationProperty.Models.Property
 @{
     ViewData["Title"] = "Details";
 }
-@{ 
-    string getRelativeDateTime(DateTime date)
-    {
-        TimeSpan ts = DateTime.Now - date;
-        if (ts.TotalMinutes < 1)//seconds ago
-            return "just now";
-        if (ts.TotalHours < 1)//min ago
-            return (int)ts.TotalMinutes == 1 ? "1 Minute ago" : (int)ts.TotalMinutes + " Minutes ago";
-        if (ts.TotalDays < 1)//hours ago
-            return (int)ts.TotalHours == 1 ? "1 Hour ago" : (int)ts.TotalHours + " Hours ago";
-        if (ts.TotalDays < 7)//days ago
-            return (int)ts.TotalDays == 1 ? "1 Day ago" : (int)ts.TotalDays + " Days ago";
-        if (ts.TotalDays < 30.4368)//weeks ago
-            return (int)(ts.TotalDays / 7) == 1 ? "1 Week ago" : (int)(ts.TotalDays / 7) + " Weeks ago";
-        if (ts.TotalDays < 365.242)//months ago
-            return (int)(ts.TotalDays / 30.4368) == 1 ? "1 Month ago" : (int)(ts.TotalDays / 30.4368) + " Months ago";
-        //years ago
-        return (int)(ts.TotalDays / 365.242) == 1 ? "1 Year ago" : (int)(ts.TotalDays / 365.242) + " Years ago";
-    }
-}
-<style>
-
+<style type="text/css">
     .carousel-inner img {
         width: 100%;
         height: 70%
@@ -54,10 +34,8 @@
     .carousel-item img {
         width: 100%;
         height: 60%;
-        
     }
 </style>
-
 
 <div>
     <div class="container">
@@ -75,17 +53,19 @@
                                         @foreach (var image in Model.FileSystemModels)
                                         {
                                             <div class="carousel-item"> <img src="~/@image.FilePath" alt="~/@image.Name"> </div>
-   
+
                                         }
 
-                                    </div> <!-- Left right --> <a class="carousel-control-prev" href="#custCarousel" data-slide="prev"> 
-                                    <span class="carousel-control-prev-icon"></span> </a> <a class="carousel-control-next" href="#custCarousel" data-slide="next"> <span class="carousel-control-next-icon"></span> </a> <!-- Thumbnails -->
+                                    </div> <!-- Left right --> <a class="carousel-control-prev" href="#custCarousel" data-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                    </a> <a class="carousel-control-next" href="#custCarousel" data-slide="next"> <span class="carousel-control-next-icon"></span> </a> <!-- Thumbnails -->
                                     <ol class="carousel-indicators list-inline">
                                         <li class="list-inline-item active"> <a id="carousel-selector-0" class="selected" data-slide-to="0" data-target="#custCarousel"> <img src="~/@Model.FileSystemModels.Select(v=>v.FilePath).FirstOrDefault()" class="img-fluid"> </a> </li>
                                         @{ int count = 0;}
                                         @foreach (var image in Model.FileSystemModels)
-                                        { count++;
-                                        <li class="list-inline-item"> <a id="carousel-selector-@count" data-slide-to="@count" data-target="#custCarousel"> <img src="~/@image.FilePath" class="img-fluid" height="300"> </a> </li>
+                                        {
+                                            count++;
+                                            <li class="list-inline-item"> <a id="carousel-selector-@count" data-slide-to="@count" data-target="#custCarousel"> <img src="~/@image.FilePath" class="img-fluid" height="300"> </a> </li>
                                         }
                                     </ol>
                                 </div>
@@ -96,19 +76,23 @@
 
                     <div class="card-body">
                         <h5 class="card-title">About the unit</h5>
-                        <p class="card-text" style="background-color:silver"><b>Property Id:</b> @Model.ProjectId  <b>Posted:</b> @getRelativeDateTime(Model.Public_date)     <b>Last update:</b> @getRelativeDateTime(Model.Update_date)</p>
-                        <p class="card-text" >@Model.Description</p>
+                        <p class="card-text" style="background-color:silver">
+                            <b>Property Id:</b> @Model.ProjectId
+                            <b>Posted:</b> @TimeHelper.GetRelativeDateTime(Model.Public_date)
+                            <b>Last update:</b> @TimeHelper.GetRelativeDateTime(Model.Update_date)
+                        </p>
+                        <p class="card-text">@Model.Description</p>
                         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-
-
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.PropertyId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+@if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Manager) || User.IsInRole(Roles.Agent))
+{
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.PropertyId" class="btn">Edit</a> |
+        <a asp-action="Index" class="btn">Back to List</a>
+    </div>
+}

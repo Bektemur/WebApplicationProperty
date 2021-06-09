@@ -54,14 +54,14 @@ namespace WebApplicationProperty.Controllers
 
             return View(properties);
         }
-        
+
         [Authorize]
         // GET: Properties/Create
         public IActionResult Create()
         {
             ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Name");
             ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "Name");
-            ViewData["CityId"] =    new SelectList(_context.City, "Id", "Name"); 
+            ViewData["CityId"] = new SelectList(_context.City, "Id", "Name");
             ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "Name");
             ViewData["Improvements"] = _context.Improvements.ToList();
             return View();
@@ -88,7 +88,7 @@ namespace WebApplicationProperty.Controllers
             var viewmodel = new List<ImprovementToProperty>();
             foreach (var item in selectedBasic)
             {
-                viewmodel.Add(new ImprovementToProperty() { ImprovementId = Convert.ToInt32(item), PropertyId = properties.PropertyId, Type = _context.Improvements.Where(v=>v.Id == Convert.ToInt32(item)).Select(v=>v.Type).FirstOrDefault() });
+                viewmodel.Add(new ImprovementToProperty() { ImprovementId = Convert.ToInt32(item), PropertyId = properties.PropertyId, Type = _context.Improvements.Where(v => v.Id == Convert.ToInt32(item)).Select(v => v.Type).FirstOrDefault() });
             }
             properties.Improvements = viewmodel;
             if (ModelState.IsValid)
@@ -147,17 +147,9 @@ namespace WebApplicationProperty.Controllers
                 .Include(p => p.TypeProperties)
                 .Include(p => p.Improvements).ThenInclude(x => x.Improvement).Include(p => p.FileSystemModels)
                 .FirstOrDefaultAsync(m => m.PropertyId == id);
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "UserName");
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId");
-            ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "StationId");
-            ViewData["CityId"] = new SelectList(_context.City, "Id", "Id");
-            ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "TypePropertyId");
-            
-                if (await TryUpdateModelAsync<Property>(
-                properties,
-                "", c=>c.Name, c=> c.Description, c => c.Update_date 
-                ))
-                {
+
+            if (await TryUpdateModelAsync<Property>(properties, "", c => c.Name, c => c.Description, c => c.Update_date))
+            {
                 var currentUserID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 properties.ApplicationUserId = currentUserID;
                 properties.Update_date = DateTime.UtcNow;
@@ -172,17 +164,22 @@ namespace WebApplicationProperty.Controllers
                 {
                     if (!PropertiesExists(properties.PropertyId))
                     {
-                       return NotFound();
+                        return NotFound();
                     }
                     else
                     {
-                       throw;
+                        throw;
                     }
                 }
-                    return RedirectToAction(nameof(Index));
-                }
+                return RedirectToAction(nameof(Index));
+            }
             UpdateImprovmentsProperty(selectedBasic, properties);
             ImprovmentsData(properties);
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "UserName");
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId");
+            ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "StationId");
+            ViewData["CityId"] = new SelectList(_context.City, "Id", "Id");
+            ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "TypePropertyId");
             return View(properties);
         }
         [Authorize]
@@ -221,7 +218,7 @@ namespace WebApplicationProperty.Controllers
         private void ImprovmentsData(Property property)
         {
             var allImprovements = _context.Improvements;
-            var propertyToImprovement = new HashSet<int>(property.Improvements.Select(v=>v.ImprovementId));
+            var propertyToImprovement = new HashSet<int>(property.Improvements.Select(v => v.ImprovementId));
             var viewModel = new List<ImprovmentsViewModel>();
             foreach (var improvement in allImprovements)
             {
@@ -244,14 +241,14 @@ namespace WebApplicationProperty.Controllers
 
             var selectedImprovmentHS = new HashSet<string>(selectedImprovments);
             var instructorCourses = new HashSet<int>(improvmentsToUpdate.Improvements.Select(c => c.Improvement.Id));
-             
+
             foreach (var improvement in _context.Improvements)
             {
                 if (selectedImprovmentHS.Contains(improvement.Id.ToString()))
                 {
                     if (!instructorCourses.Contains(improvement.Id))
                     {
-                        improvmentsToUpdate.Improvements.Add(new ImprovementToProperty { PropertyId = improvmentsToUpdate.PropertyId, ImprovementId = improvement.Id, Type = _context.Improvements.Where(v => v.Id == improvement.Id).Select(r=>r.Type).FirstOrDefault() });
+                        improvmentsToUpdate.Improvements.Add(new ImprovementToProperty { PropertyId = improvmentsToUpdate.PropertyId, ImprovementId = improvement.Id, Type = _context.Improvements.Where(v => v.Id == improvement.Id).Select(r => r.Type).FirstOrDefault() });
                     }
                 }
                 else
@@ -268,6 +265,6 @@ namespace WebApplicationProperty.Controllers
         {
             return _context.Properties.Any(e => e.PropertyId == id);
         }
-        
+
     }
 }
