@@ -7,8 +7,6 @@ using WebApplicationProperty.Models;
 using Microsoft.AspNetCore.Authorization;
 using WebApplicationProperty.Data;
 using System;
-using System.IO;
-using CsvHelper;
 using System.Text;
 
 namespace WebApplicationProperty.Controllers
@@ -26,7 +24,12 @@ namespace WebApplicationProperty.Controllers
             _signInManager = signInManager;
         }
 
-        public IActionResult Index() => View(_roleManager.Roles.OrderBy(x => x.CreatedDate).ToList());
+        public IActionResult Index(int skip = 0, int take = 10) => 
+            View(_roleManager.Roles
+                .OrderBy(x => x.CreatedDate)
+                .Skip(skip)
+                .Take(take)
+                .ToList());
 
         public IActionResult Create() => View();
         [HttpPost]
@@ -154,30 +157,15 @@ namespace WebApplicationProperty.Controllers
         [HttpPost]
         public FileResult Export()
         {
-            //var s =  _userManager.Users
-      
-                StringBuilder sb = new StringBuilder();
-                List<object> users = (from user in _userManager.Users.ToList()
-                                      select new[] {  user.FirstName.ToString(),
-                                                             user.LastName,
-                                                             user.Email,
-                                                             user.PhoneNumber,
-                                                             user.UserName,
-                                                             user.CreatedDate.ToString()
-                                }).ToList<object>();
-                    users.Insert(0, new string[6] { "FirstName", "LastName", "Email", "PhoneNumber", "UserName", "Created Date" });
-                    for (int i = 0; i < users.Count(); i++)
-                    {
-                        string[] user = (string[])users[i];
-                        for (int j = 0; j < user.Length; j++)
-                        {
-                                sb.Append(user[j] + ',');
-                        }
-                        sb.Append("\r\n");
-                    }
-                   
-               
-                return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "AllUsers.csv");
+            StringBuilder sb = new StringBuilder();
+            var users = new List<string>() { string.Join(",", "Id", "CreatedDate", "UserName", "FirstName", "LastName", "Email", "PhoneNumber") };
+            var query = _userManager.Users.Select(x => string.Join(",", x.Id, x.CreatedDate.ToString("G"), x.UserName, x.FirstName, x.LastName, x.Email, x.PhoneNumber)).ToList();
+            users.AddRange(query);
+            foreach (var user in users)
+            {
+                sb.Append(user + "\r\n");
+            }
+            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "AllUsers.csv");
         }
     }
 }
