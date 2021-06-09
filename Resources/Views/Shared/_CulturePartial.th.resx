@@ -126,4 +126,7 @@
   <data name="th" xml:space="preserve">
     <value>Thai (ไทย)</value>
   </data>
+  <data name="zh" xml:space="preserve">
+    <value>Chinese</value>
+  </data>
 </root>

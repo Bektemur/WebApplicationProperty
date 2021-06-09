@@ -69,6 +69,7 @@ namespace WebApplicationProperty
                 var cultures = new List<CultureInfo> {
                     new CultureInfo("en"),
                     new CultureInfo("th"),
+                    new CultureInfo("zh"),
                     new CultureInfo("ru")
                 };
                 options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("en");

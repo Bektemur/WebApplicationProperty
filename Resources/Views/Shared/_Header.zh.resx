@@ -117,16 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="en" xml:space="preserve">
-    <value>Английский</value>
+  <data name="About us" xml:space="preserve">
+    <value>About us</value>
   </data>
-  <data name="ru" xml:space="preserve">
-    <value>Русский</value>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
   </data>
-  <data name="th" xml:space="preserve">
-    <value>Тайский</value>
-  </data>
-  <data name="zh" xml:space="preserve">
-    <value>Китайский</value>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
   </data>
 </root>

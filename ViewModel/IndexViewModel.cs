@@ -40,9 +40,9 @@ namespace WebApplicationProperty.ViewModel
 
     public enum PropertyContractType
     {
-        [Display(Name = "For rent")]
+        [Display(Name = "For Rent")]
         ForRent = 0,
-        [Display(Name = "For sale")]
+        [Display(Name = "For Sale")]
         ForSale = 1,
     }
     public enum PropertyType
