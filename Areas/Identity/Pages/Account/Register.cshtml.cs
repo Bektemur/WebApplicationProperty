@@ -68,6 +68,9 @@ namespace WebApplicationProperty.Areas.Identity.Pages.Account
             public string FirstName { get; set; }
             [Required]
             public string LastName { get; set; }
+            [Required]
+            [Display(Name = "AcceptPrivacyPolicy")]
+            public bool IsAgreePrivacyPolicy { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
