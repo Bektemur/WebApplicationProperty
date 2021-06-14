@@ -130,7 +130,7 @@ namespace WebApplicationProperty.Controllers
             var query = _context.Properties.Include(x => x.FileSystemModels).Include(x => x.Improvements).AsQueryable();
             if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(v => v.Name.Contains(search)).AsQueryable();
+                query = query.Where(v => v.Name.Contains(search) || v.Street.Contains(search)).AsQueryable();
             }
             if (selectedImprovments != null && selectedImprovments.Length > 0)
             {
