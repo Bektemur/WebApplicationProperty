@@ -37,7 +37,7 @@ namespace WebApplicationProperty.Controllers
                 model.PropertyBedrooms, model.PriceForRent, model.PriceForSale, model.Search, model.Page, model.Take, model.Id);
             return PartialView("_PropertySearchPartial", indexViewModel);
         }
-       
+
         public IActionResult Index()
         {
             IndexViewModel indexViewModel = new IndexViewModel()
@@ -113,12 +113,12 @@ namespace WebApplicationProperty.Controllers
                 Page = page,
                 Take = take,
                 Property = propertyById,
-               
+
             };
             return indexViewModel;
         }
 
-        public async Task<IndexViewModel> GetIndexViewModel(int[] selectedImprovments, PropertyContractType propertyContractType,  PropertyType propertyType, BedRooms BedRooms,  PriceForRent priceForRent, PriceForSale priceForSale, string search, int page = 1, int take = 25, int id = 0)
+        public async Task<IndexViewModel> GetIndexViewModel(int[] selectedImprovments, PropertyContractType propertyContractType, PropertyType propertyType, BedRooms BedRooms, PriceForRent priceForRent, PriceForSale priceForSale, string search, int page = 1, int take = 25, int id = 0)
         {
             var propertyById = id <= 0 ? null : _context.Properties
                .Include(p => p.Project)
@@ -144,8 +144,11 @@ namespace WebApplicationProperty.Controllers
             {
                 query = query.Where(c => c.ForSale);
             }
-            if(!GetPropertyType(propertyType).Contains("Any"))
-            query = query.Where(c=>c.TypeProperties.Name == GetPropertyType(propertyType));
+            if (propertyType != PropertyType.Any)
+            {
+                query = query.Where(c => c.TypeProperties.Name == Enum.GetName(typeof(PropertyType), propertyType));
+            }
+
             if (BedRooms == BedRooms.Beds1)
             {
                 query = query.Where(c => c.Bedrooms == 1);
@@ -275,29 +278,31 @@ namespace WebApplicationProperty.Controllers
                     break;
             }
         }
-        private string GetPropertyType(PropertyType propertyType)
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Callback(CallbackViewModel model)
         {
-            return propertyType switch
+            if (ModelState.IsValid)
             {
-                PropertyType.Any => "Any",
-                PropertyType.Unspecified => "Unspecified",
-                PropertyType.Townhouse => "Townhouse",
-                PropertyType.House => "House",
-                PropertyType.Condominium => "Condominium",
-                PropertyType.Appartment => "Appartment",
-                PropertyType.Office => "Office",
-                PropertyType.Land => "Land",
-                PropertyType.Penthouse => "Penthouse",
-                PropertyType.ServicedApartment => "ServicedApartment",
-                PropertyType.ShopHouse => "ShopHouse",
-                PropertyType.Retail => "Retail",
-                PropertyType.Business => "Business",
-                PropertyType.Factory => "Factory",
-                PropertyType.CommercialBuilding => "CommercialBuilding",
-                PropertyType.HotelResort => "HotelResort",
-                PropertyType.OtherCommertcial => "OtherCommertcial",
-                _ => "Any",
-            };
+                var entity = _context.Callbacks.Add(new CallbackModel()
+                {
+                    Name = model.Name,
+                    Phone = model.Phone,
+                    Email = model.Email,
+                    Message = model.Message,
+                    PropertyId = model.PropertyId
+                });
+                _context.SaveChanges();
+
+                return PartialView("_Callback", new CallbackViewModel()
+                {
+                    Id = entity.Entity.Id,
+                    PropertyId = model.PropertyId
+                });
+            }
+            model.Id = 0;
+            return PartialView("_Callback", model);
         }
     }
 }

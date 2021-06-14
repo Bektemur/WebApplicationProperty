@@ -17,7 +17,8 @@ namespace WebApplicationProperty.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<TypeProperty>().HasData(new TypeProperty() { TypePropertyId = 1, Name = "Unspecified" }, 
+            modelBuilder.Entity<TypeProperty>().HasData(
+                new TypeProperty() { TypePropertyId = 1, Name = "Unspecified" },
                 new TypeProperty() { TypePropertyId = 2, Name = "Townhouse" },
                 new TypeProperty() { TypePropertyId = 3, Name = "House" },
                 new TypeProperty() { TypePropertyId = 4, Name = "Condominium" },
@@ -34,7 +35,7 @@ namespace WebApplicationProperty.Data
                 new TypeProperty() { TypePropertyId = 15, Name = "Hotel / Resort" },
                 new TypeProperty() { TypePropertyId = 16, Name = "Other Commertcial" });
             modelBuilder.Entity<Improvement>().HasData(
-                new Improvement() { Id = 1 , Name = "Parking", Type = ImprovementType.Facilities },
+                new Improvement() { Id = 1, Name = "Parking", Type = ImprovementType.Facilities },
                 new Improvement() { Id = 2, Name = "TV", Type = ImprovementType.Facilities },
                 new Improvement() { Id = 3, Name = "Refrigerator", Type = ImprovementType.Facilities },
                 new Improvement() { Id = 4, Name = "Washing Machine", Type = ImprovementType.Facilities },
@@ -130,12 +131,12 @@ namespace WebApplicationProperty.Data
         public DbSet<Station> Stations { get; set; }
         public DbSet<FileOnFileSystemModel> FilesOnFileSystem { get; set; }
         public DbSet<Improvement> Improvements { get; set; }
-        
-        public DbSet<Contact> Contacts { get;set; }
-        
-        public DbSet<WebApplicationProperty.Models.City> City { get; set; }
-        
-        public DbSet<WebApplicationProperty.Models.Province> Province { get; set; }
+
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<City> City { get; set; }
+        public DbSet<Province> Province { get; set; }
+
+        public DbSet<CallbackModel> Callbacks { get; set; }
         //public DbSet<City> Cities { get; set; }
         //public DbSet<Region> Regions { get; set; }
 

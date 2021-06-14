@@ -15,6 +15,7 @@ using WebApplicationProperty.ViewModel;
 
 namespace WebApplicationProperty.Controllers
 {
+    [Authorize]
     public class PropertiesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,14 +26,14 @@ namespace WebApplicationProperty.Controllers
             _context = context;
             _webHostEnvironment = webHostEnvironment;
         }
-        [Authorize]
+
         // GET: Properties
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Properties.Include(p => p.User).Include(p => p.Project).Include(p => p.Station).Include(p => p.TypeProperties);
             return View(await applicationDbContext.ToListAsync());
         }
-        [Authorize]
+
         // GET: Properties/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -55,7 +56,6 @@ namespace WebApplicationProperty.Controllers
             return View(properties);
         }
 
-        [Authorize]
         // GET: Properties/Create
         public IActionResult Create()
         {
@@ -104,7 +104,7 @@ namespace WebApplicationProperty.Controllers
             ViewData["Improvements"] = _context.Improvements.ToList();
             return View(properties);
         }
-        [Authorize]
+
         // GET: Properties/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -182,7 +182,7 @@ namespace WebApplicationProperty.Controllers
             ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "TypePropertyId");
             return View(properties);
         }
-        [Authorize]
+
         // GET: Properties/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
