@@ -47,18 +47,15 @@
 {
     <partial name="_ValidationScriptsPartial" />
     <partial name="_Ajax" />
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyD7nYxVPynhALgxmvBMe5iggBIL7RUvASk&callback=initialize&libraries=places&v=weekly"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyD7nYxVPynhALgxmvBMe5iggBIL7RUvASk&libraries=places&v=weekly&language=en"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        function initializeTheMap() {
             var map;
             var marker;
             var lat = document.getElementById("lat").value;
             var lon = document.getElementById("lon").value;
             var myLatlng = new google.maps.LatLng(lat, lon);
 
-            google.maps.event.addDomListener(window, 'load', initialize);
-        });
-        function initialize() {
             var mapOptions = {
                 zoom: 18,
                 center: myLatlng,
@@ -72,6 +69,8 @@
                 draggable: false
             });
         }
+
+        google.maps.event.addDomListener(window, 'load', initializeTheMap);
     </script>
 }
 
@@ -201,7 +200,7 @@
                 <div class="card-body">
                     <h4> @Model.Property.HouseNumber, @Model.Property.Street, @Model.Property.SubDistrict, @Model.Property.District, @Model.Property.Province, @Model.Property.ZipCode, @Model.Property.Country</h4>
                     <blockquote class="blockquote mb-0">
-                        <div id="webkulMap" style="height: 400px; width:100%;"></div>
+                        <div id="webkulMap" style="height: 400px; width:100%;" class="bg-light border"></div>
                     </blockquote>
                 </div>
             </div>
