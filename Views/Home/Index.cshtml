@@ -68,8 +68,8 @@
 
                 <div class="card-body">
                     <h5 class="card-title"><a asp-area="" asp-controller="Home" asp-action="Details" asp-route-id="@item.PropertyId">@item.Name</a></h5>
-                    <p class="card-text"><small class="text-muted">Last updated @TimeHelper.GetRelativeDateTime(item.Update_date)</small></p>
-                    <p class="card-text float-right" style="background-color:silver; margin-top:-50px"> @(item.ForSale ? item.Price: item.Price_rent) THB</p>
+                    <p class="card-text"><small class="text-muted">Last updated @TimeHelper.GetRelativeDateTime(item.UpdateDate)</small></p>
+                    <p class="card-text float-right" style="background-color:silver; margin-top:-50px"> @(item.ForSale ? item.PriceSale: item.PriceRent) THB</p>
                 </div>
 
             </div>

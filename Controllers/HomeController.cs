@@ -168,12 +168,12 @@ namespace WebApplicationProperty.Controllers
             PriceRangeForSale(priceForSale, out double minvalueForSale, out double maxvalueForSale);
             if (propertyContractType == PropertyContractType.ForSale)
             {
-                query = query.Where(c => c.Price_rent <= maxvalueForSale && c.Price_rent >= minvalueForSale);
+                query = query.Where(c => c.PriceRent <= maxvalueForSale && c.PriceRent >= minvalueForSale);
             }
             PriceRangeForRent(priceForRent, out double minvalueForRent, out double maxvalueForRent);
             if (propertyContractType == PropertyContractType.ForRent)
             {
-                query = query.Where(c => c.Price_rent <= maxvalueForRent && c.Price_rent >= minvalueForRent);
+                query = query.Where(c => c.PriceRent <= maxvalueForRent && c.PriceRent >= minvalueForRent);
             }
             var propertyList = await query.Skip((page - 1) * take).Take(take).ToListAsync();
 

@@ -81,8 +81,12 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-12">
-            <a class="btn btn-warning" asp-controller="Home" style="margin-bottom: 10px;" asp-action="Search">Back to property listings</a>
+        <div class="col-12 mb-1">
+            <a class="btn btn-primary" asp-controller="Home" asp-action="Search">Back to property listings</a>
+            @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Manager))
+            {
+                <a class="btn btn-warning" asp-controller="Properties" asp-action="Edit" asp-route-id="@Model.Property.PropertyId">Edit</a>
+            }
         </div>
         <div class="col-sm-8">
             <div class="card">
@@ -93,12 +97,12 @@
 
                     @if (Model.Property.ForRent)
                     {
-                        <h4 class="card-title">For rent:  @Model.Property.Price_rent  THB</h4>
+                        <h4 class="card-title">For rent:  @Model.Property.PriceRent  THB</h4>
                     }
                     @if (Model.Property.ForSale)
                     {
 
-                        <h4 class="card-title">For sale:    @Model.Property.Price  THB</h4>
+                        <h4 class="card-title">For sale:    @Model.Property.PriceSale  THB</h4>
                     }
                 </div>
             </div>
@@ -138,8 +142,8 @@
 
                     <p class="card-text" style="background-color:silver">
                         <b>Property Id:</b> @Model.Property.PropertyId &nbsp;
-                        <b>Posted:</b> @TimeHelper.GetRelativeDateTime(Model.Property.Public_date) &nbsp;
-                        <b>Last update:</b> @TimeHelper.GetRelativeDateTime(Model.Property.Update_date)
+                        <b>Posted:</b> @TimeHelper.GetRelativeDateTime(Model.Property.PublicDate) &nbsp;
+                        <b>Last update:</b> @TimeHelper.GetRelativeDateTime(Model.Property.UpdateDate)
                     </p>
                     <p class="card-text">@Html.Raw(Model.Property.Description)</p>
                     <input style="visibility:hidden" id="lat" value="@Model.Property.Latitude" />
@@ -176,7 +180,7 @@
                     <b>Location</b>
                 </div>
                 <div class="card-body">
-                    <h4> @Model.Property.Number, @Model.Property.Street, @Model.Property.SubDistrict, @Model.Property.District, @Model.Property.Province, @Model.Property.ZipCode, @Model.Property.Country</h4>
+                    <h4> @Model.Property.HouseNumber, @Model.Property.Street, @Model.Property.SubDistrict, @Model.Property.District, @Model.Property.Province, @Model.Property.ZipCode, @Model.Property.Country</h4>
                     <blockquote class="blockquote mb-0">
                         <div id="webkulMap" style="height: 400px; width:800px;"></div>
                     </blockquote>
@@ -196,15 +200,8 @@
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
                         <partial name="_Callback" model="new CallbackViewModel() { PropertyId = Model?.Property?.PropertyId??0 }" />
-                        @*<form asp-controller="Home" asp-action="Callback" method="post">
-                                <input name="Name" placeholder="Name (Required)" class="form-control" />
-                                <input name="Email" placeholder="Emails (Required)" class="form-control" />
-                                <input name="Phone" placeholder="Phone (Optional)" class="form-control" />
-                                <textarea name="Description" placeholder="Message (Optional)" class="form-control"></textarea>
-                                <input value="Send" type="submit" class="btn btn-success w-100" /><br />
-                            </form>*@
-                        <p class="text-center mb-0">or</p>
-                        <a href="tel:+66894581616" class="btn btn-success w-100">Call +66 89 458 1616</a>
+                        <p class="text-center m-0">or</p>
+                        <a href="tel:+66894581616" class="btn btn-info w-100">Call +66 89 458 1616</a>
                     </blockquote>
                 </div>
             </div>
@@ -218,8 +215,8 @@
                     </div>
                     <div class="card-body">
                         <blockquote class="blockquote mb-0">
-                            Price:  @Model.Property.Price_rent  THB<br />
-                            Price/sqm:  @Model.Property.Price_sqm   THB / sqm
+                            Price:  @Model.Property.PriceRent  THB<br />
+                            Price/sqm:  @Model.Property.PriceSaleSqm   THB / sqm
                         </blockquote>
                     </div>
                 </div>
@@ -234,8 +231,8 @@
                     </div>
                     <div class="card-body">
                         <blockquote class="blockquote mb-0">
-                            Price:  @Model.Property.Price  THB<br />
-                            Price/sqm:  @Model.Property.Price_sqm   THB / sqm
+                            Price:  @Model.Property.PriceSale  THB<br />
+                            Price/sqm:  @Model.Property.PriceSaleSqm   THB / sqm
                         </blockquote>
                     </div>
                 </div>
@@ -248,8 +245,8 @@
                 </div>
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
-                        Price:  @Model.Property.Price  THB<br />
-                        Price/sqm:  @Model.Property.Price_sqm   THB / sqm
+                        Price:  @Model.Property.PriceSale  THB<br />
+                        Price/sqm:  @Model.Property.PriceSaleSqm   THB / sqm
                     </blockquote>
                 </div>
             </div>
@@ -264,7 +261,7 @@
                         Bathrooms:  @Model.Property.Bathrooms<br />
                         Bedrooms:  @Model.Property.Bedrooms<br />
                         Parking: @Model.Property.Parking<br />
-                        Living area:  @Model.Property.Living_area<br />
+                        Living area:  @Model.Property.LivingArea<br />
                         Type: @Model.Property.TypeProperties.Name<br />
                     </blockquote>
                 </div>

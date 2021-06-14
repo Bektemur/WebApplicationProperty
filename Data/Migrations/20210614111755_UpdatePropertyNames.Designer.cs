@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplicationProperty.Data;
 
 namespace WebApplicationProperty.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210614111755_UpdatePropertyNames")]
+    partial class UpdatePropertyNames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -938,9 +940,6 @@ namespace WebApplicationProperty.Data.Migrations
                     b.Property<bool>("ForSale")
                         .HasColumnType("bit");
 
-                    b.Property<string>("HouseNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<double>("LandArea")
                         .HasColumnType("float");
 
@@ -981,6 +980,9 @@ namespace WebApplicationProperty.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StreetNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SubDistrict")
