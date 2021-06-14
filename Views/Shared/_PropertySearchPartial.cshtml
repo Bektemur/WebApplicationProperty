@@ -34,7 +34,7 @@
             <div class="col-md-9 p-2">
                 <div class="card-body">
                     <h5 class="card-title"><a asp-area="" asp-controller="Home" asp-action="Details" asp-route-id="@item.PropertyId">@item.Name</a></h5>
-                    <p class="card-text">@item.Street @item.HouseNumber</p>
+                    <p class="card-text"><span>@item.HouseNumber</span>, <span>@item.Street</span></p>
                     <p class="card-text"><small class="text-muted">Last updated @TimeHelper.GetRelativeDateTime(@item.UpdateDate)</small></p>
                     <p class="card-text float-right" style="background-color:silver; margin-top:-50px">
                         @(item.ForSale?"Sale "+ item.PriceSale + " THB" : "")
