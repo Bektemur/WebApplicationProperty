@@ -1,0 +1,29 @@
+﻿@model Dictionary<int, List<string>>
+<hr />
+<form method="post" enctype="multipart/form-data" class="w-50" asp-antiforgery="true">
+    <input type="file" name="uploads" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /><br>
+    <input type="submit" value="Upload" />
+</form>
+<hr />
+@if (Model != null && Model.Count > 1)
+{
+    <table class="table table-striped table-bordered w-100">
+        @{ var firstRow = Model.FirstOrDefault().Value.Take(10); }
+        <tr>
+            @foreach (var colName in firstRow)
+            {
+                <th>@colName</th>
+            }
+        </tr>
+        @foreach (var line in Model.Skip(1))
+        {
+            <tr id="@line.Key">
+                @foreach (var col in line.Value.Take(10))
+                {
+                    <td>@col</td>
+                }
+            </tr>
+        }
+    </table>
+}
+<hr />
