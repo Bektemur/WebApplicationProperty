@@ -13,6 +13,9 @@
     <script type="text/javascript" src="~/simditor/uploader.js"></script>
     <script type="text/javascript" src="~/simditor/simditor.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyD7nYxVPynhALgxmvBMe5iggBIL7RUvASk&callback=initialize&libraries=places&v=weekly"></script>
+    <script src="~/lib/select2/js/select2.js"></script>
+    <link href="~/lib/select2/css/select2.css" rel="stylesheet" />
+    <script src="~/js/Properties/properties.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -134,7 +137,7 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label asp-for="ProjectId" class="control-label">Project</label>
-                            <select asp-for="ProjectId" class="form-control" asp-items="ViewBag.ProjectId"></select>
+                            <select asp-for="ProjectId" class="form-control project-selector-ajax" asp-items="ViewBag.ProjectId"></select>
                         </div>
                         <div class="form-group">
                             <label asp-for="StationId" class="control-label">BTS/MRT station</label>
@@ -302,10 +305,10 @@
                 </div>
             </div>
             <div class="hide">
-                <input type="hidden" asp-for="PropertyId" />
-                <input type="hidden" asp-for="PublicDate" />
-                <input type="hidden" asp-for="UpdateDate" />
-                <input type="hidden" asp-for="ApplicationUserId" />
+                <input type="hidden" asp-for="PropertyId" value="0" />
+                <input type="hidden" asp-for="PublicDate" value="@DateTime.UtcNow.ToString("G")" />
+                <input type="hidden" asp-for="UpdateDate" value="@DateTime.UtcNow.ToString("G")" />
+                <input type="hidden" asp-for="ApplicationUserId" value="0" />
             </div>
             <div class="col-sm-4">
                 <div class="form-group">

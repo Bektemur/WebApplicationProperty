@@ -95,10 +95,10 @@ namespace WebApplicationProperty.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId", properties.ProjectId);
-            ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "StationId", properties.StationId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Name", properties.ProjectId);
+            ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "Name", properties.StationId);
             ViewData["CityId"] = new SelectList(_context.City, "Id", "Name", properties.CityId);
-            ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "TypePropertyId", properties.TypePropertyId);
+            ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "Name", properties.TypePropertyId);
             ViewData["Improvements"] = allImprovments;
             return View(properties);
         }
@@ -121,11 +121,11 @@ namespace WebApplicationProperty.Controllers
             {
                 return NotFound();
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "UserName");
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Name");
-            ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "Name");
-            ViewData["CityId"] = new SelectList(_context.City, "Id", "Name");
-            ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "Name");
+            ViewData["ApplicationUserId"] = new SelectList(_context.Users, "Id", "UserName", property.ApplicationUserId);
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Name", property.ProjectId);
+            ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "Name", property.StationId);
+            ViewData["CityId"] = new SelectList(_context.City, "Id", "Name", property.CityId);
+            ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "Name", property.TypePropertyId);
             LoadImprovmentsToViewData(property);
             return View(_mapper.Map<PropertyViewModel>(property));
         }
@@ -178,10 +178,10 @@ namespace WebApplicationProperty.Controllers
                     }
                 }
             }
-            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "ProjectId");
-            ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "StationId");
-            ViewData["CityId"] = new SelectList(_context.City, "Id", "Id");
-            ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "TypePropertyId");
+            ViewData["ProjectId"] = new SelectList(_context.Projects, "ProjectId", "Name", model.ProjectId);
+            ViewData["StationId"] = new SelectList(_context.Stations, "StationId", "Name", model.StationId);
+            ViewData["CityId"] = new SelectList(_context.City, "Id", "Name", model.CityId);
+            ViewData["TypePropertyId"] = new SelectList(_context.TypeProperties, "TypePropertyId", "Name", model.TypePropertyId);
             LoadImprovmentsToViewData(model);
             return View(model);
         }
@@ -222,7 +222,7 @@ namespace WebApplicationProperty.Controllers
         private void LoadImprovmentsToViewData(Property property)
         {
             var allImprovements = _context.Improvements.ToList();
-            var propertyToImprovement = property.Improvements.Select(v => v.ImprovementId).ToList();
+            var propertyToImprovement = property?.Improvements?.Select(v => v.ImprovementId).ToList() ?? new List<int>();
             var improvments = new List<ImprovmentsViewModel>();
             foreach (var improvement in allImprovements)
             {

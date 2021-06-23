@@ -11,6 +11,7 @@ using WebApplicationProperty.Models;
 
 namespace WebApplicationProperty.Controllers
 {
+    [Authorize]
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,13 +20,13 @@ namespace WebApplicationProperty.Controllers
         {
             _context = context;
         }
-        [Authorize]
+
         // GET: Projects
         public async Task<IActionResult> Index()
         {
             return View(await _context.Projects.ToListAsync());
         }
-        [Authorize]
+
         // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -43,7 +44,7 @@ namespace WebApplicationProperty.Controllers
 
             return View(project);
         }
-        [Authorize]
+
         // GET: Projects/Create
         public IActionResult Create()
         {
@@ -51,21 +52,20 @@ namespace WebApplicationProperty.Controllers
         }
 
         // POST: Projects/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProjectId,Name")] Project project)
         {
             if (ModelState.IsValid)
             {
+                project.CreatedDate = DateTime.UtcNow;
                 _context.Add(project);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(project);
         }
-        [Authorize]
+
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -83,8 +83,6 @@ namespace WebApplicationProperty.Controllers
         }
 
         // POST: Projects/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProjectId,Name")] Project project)
@@ -98,6 +96,7 @@ namespace WebApplicationProperty.Controllers
             {
                 try
                 {
+                    project.CreatedDate = DateTime.UtcNow;
                     _context.Update(project);
                     await _context.SaveChangesAsync();
                 }
@@ -116,7 +115,7 @@ namespace WebApplicationProperty.Controllers
             }
             return View(project);
         }
-        [Authorize]
+
         // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -149,6 +148,27 @@ namespace WebApplicationProperty.Controllers
         private bool ProjectExists(int id)
         {
             return _context.Projects.Any(e => e.ProjectId == id);
+        }
+
+        public async Task<JsonResult> GetJson(string s, int page = 1)
+        {
+            var list = await _context.Projects.Where(x => string.IsNullOrWhiteSpace(s) || x.Name.Contains(s)).Select(x => new { id = x.ProjectId, text = x.Name }).ToListAsync();
+            return new JsonResult(list);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateFromJson(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) 
+            {
+                return BadRequest();
+            }
+
+            var project = new Project() { Name = name, CreatedDate = DateTime.UtcNow };
+            var saved = _context.Add(project);
+            await _context.SaveChangesAsync();
+            project.ProjectId = saved.Entity.ProjectId;
+            return new JsonResult(project);
         }
     }
 }
